@@ -1,0 +1,10 @@
+me.prettyprint.hector.api
+me.prettyprint.cassandra.service
+me.prettyprint.cassandra.model
+me.prettyprint.cassandra
+me.prettyprint.cassandra.utils
+me.prettyprint.cassandra.serializers
+me.prettyprint.cassandra.connection
+me.prettyprint.cassandra.dao
+me.prettyprint.cassandra.jndi
+me.prettyprint.cassandra.examples

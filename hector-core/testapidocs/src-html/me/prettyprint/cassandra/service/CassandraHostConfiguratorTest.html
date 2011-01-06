@@ -1,0 +1,165 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.cassandra.service;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import static org.junit.Assert.*;<a name="line.3"></a>
+<FONT color="green">004</FONT>    <a name="line.4"></a>
+<FONT color="green">005</FONT>    import me.prettyprint.hector.api.ClockResolution;<a name="line.5"></a>
+<FONT color="green">006</FONT>    <a name="line.6"></a>
+<FONT color="green">007</FONT>    import org.junit.Before;<a name="line.7"></a>
+<FONT color="green">008</FONT>    import org.junit.Test;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    public class CassandraHostConfiguratorTest {<a name="line.10"></a>
+<FONT color="green">011</FONT>    <a name="line.11"></a>
+<FONT color="green">012</FONT>      @Before<a name="line.12"></a>
+<FONT color="green">013</FONT>      public void setup() {<a name="line.13"></a>
+<FONT color="green">014</FONT>    <a name="line.14"></a>
+<FONT color="green">015</FONT>      }<a name="line.15"></a>
+<FONT color="green">016</FONT>    <a name="line.16"></a>
+<FONT color="green">017</FONT>      @Test<a name="line.17"></a>
+<FONT color="green">018</FONT>      public void testSimpleCassandraHostSetup() {<a name="line.18"></a>
+<FONT color="green">019</FONT>        CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator("localhost:9170");<a name="line.19"></a>
+<FONT color="green">020</FONT>        CassandraHost[] cassandraHosts = cassandraHostConfigurator.buildCassandraHosts();<a name="line.20"></a>
+<FONT color="green">021</FONT>        assertEquals(1,cassandraHosts.length);<a name="line.21"></a>
+<FONT color="green">022</FONT>      }<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>      @Test<a name="line.24"></a>
+<FONT color="green">025</FONT>      public void testCassandraHostSetupSplit() {<a name="line.25"></a>
+<FONT color="green">026</FONT>        CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator("localhost:9170,localhost:9171,localhost:9172");<a name="line.26"></a>
+<FONT color="green">027</FONT>        CassandraHost[] cassandraHosts = cassandraHostConfigurator.buildCassandraHosts();<a name="line.27"></a>
+<FONT color="green">028</FONT>        assertEquals(3,cassandraHosts.length);<a name="line.28"></a>
+<FONT color="green">029</FONT>        assertEquals(9172,cassandraHosts[2].getPort());<a name="line.29"></a>
+<FONT color="green">030</FONT>      }<a name="line.30"></a>
+<FONT color="green">031</FONT>    <a name="line.31"></a>
+<FONT color="green">032</FONT>      @Test<a name="line.32"></a>
+<FONT color="green">033</FONT>      public void testConfigValuesPropogated() {<a name="line.33"></a>
+<FONT color="green">034</FONT>        CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator("localhost:9170,localhost:9171,localhost:9172");<a name="line.34"></a>
+<FONT color="green">035</FONT>        cassandraHostConfigurator.setMaxActive(20);<a name="line.35"></a>
+<FONT color="green">036</FONT>        cassandraHostConfigurator.setMaxIdle(5);<a name="line.36"></a>
+<FONT color="green">037</FONT>        cassandraHostConfigurator.setCassandraThriftSocketTimeout(3000);<a name="line.37"></a>
+<FONT color="green">038</FONT>        cassandraHostConfigurator.setMaxWaitTimeWhenExhausted(4000);<a name="line.38"></a>
+<FONT color="green">039</FONT>        cassandraHostConfigurator.setExhaustedPolicy(ExhaustedPolicy.WHEN_EXHAUSTED_GROW);<a name="line.39"></a>
+<FONT color="green">040</FONT>        CassandraHost[] cassandraHosts = cassandraHostConfigurator.buildCassandraHosts();<a name="line.40"></a>
+<FONT color="green">041</FONT>        // no need to test all, just a smattering<a name="line.41"></a>
+<FONT color="green">042</FONT>        assertEquals(20, cassandraHosts[1].getMaxActive());<a name="line.42"></a>
+<FONT color="green">043</FONT>        assertEquals(20, cassandraHosts[0].getMaxActive());<a name="line.43"></a>
+<FONT color="green">044</FONT>        assertEquals(5, cassandraHosts[1].getMaxIdle());<a name="line.44"></a>
+<FONT color="green">045</FONT>        assertEquals(ExhaustedPolicy.WHEN_EXHAUSTED_GROW, cassandraHosts[1].getExhaustedPolicy());<a name="line.45"></a>
+<FONT color="green">046</FONT>        assertEquals(4000, cassandraHosts[1].getMaxWaitTimeWhenExhausted());<a name="line.46"></a>
+<FONT color="green">047</FONT>        assertEquals(3000, cassandraHosts[2].getCassandraThriftSocketTimeout());<a name="line.47"></a>
+<FONT color="green">048</FONT>        assertEquals(3000, cassandraHosts[0].getCassandraThriftSocketTimeout());<a name="line.48"></a>
+<FONT color="green">049</FONT>      }<a name="line.49"></a>
+<FONT color="green">050</FONT>    <a name="line.50"></a>
+<FONT color="green">051</FONT>      @Test<a name="line.51"></a>
+<FONT color="green">052</FONT>      public void testApplyConfig() {<a name="line.52"></a>
+<FONT color="green">053</FONT>        CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator("localhost:9170");<a name="line.53"></a>
+<FONT color="green">054</FONT>        cassandraHostConfigurator.setMaxActive(15);<a name="line.54"></a>
+<FONT color="green">055</FONT>        CassandraHost extraHost = new CassandraHost("localhost:9171");<a name="line.55"></a>
+<FONT color="green">056</FONT>        cassandraHostConfigurator.applyConfig(extraHost);<a name="line.56"></a>
+<FONT color="green">057</FONT>        assertEquals(15, extraHost.getMaxActive());<a name="line.57"></a>
+<FONT color="green">058</FONT>      }<a name="line.58"></a>
+<FONT color="green">059</FONT>    <a name="line.59"></a>
+<FONT color="green">060</FONT>      @Test<a name="line.60"></a>
+<FONT color="green">061</FONT>      public void testHostnameOnlyDefaultPort() {<a name="line.61"></a>
+<FONT color="green">062</FONT>        CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator("localhost");<a name="line.62"></a>
+<FONT color="green">063</FONT>        CassandraHost[] cassandraHosts = cassandraHostConfigurator.buildCassandraHosts();<a name="line.63"></a>
+<FONT color="green">064</FONT>        assertEquals(CassandraHost.DEFAULT_PORT,cassandraHosts[0].getPort());<a name="line.64"></a>
+<FONT color="green">065</FONT>      }<a name="line.65"></a>
+<FONT color="green">066</FONT>    <a name="line.66"></a>
+<FONT color="green">067</FONT>      @Test<a name="line.67"></a>
+<FONT color="green">068</FONT>      public void testHostnameOnlyDefaultPortMultipleHosts() {<a name="line.68"></a>
+<FONT color="green">069</FONT>        CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator("h1,h2,h3:1111");<a name="line.69"></a>
+<FONT color="green">070</FONT>        CassandraHost[] cassandraHosts = cassandraHostConfigurator.buildCassandraHosts();<a name="line.70"></a>
+<FONT color="green">071</FONT>        assertEquals(CassandraHost.DEFAULT_PORT, cassandraHosts[0].getPort());<a name="line.71"></a>
+<FONT color="green">072</FONT>        assertEquals(CassandraHost.DEFAULT_PORT, cassandraHosts[1].getPort());<a name="line.72"></a>
+<FONT color="green">073</FONT>        assertEquals(1111, cassandraHosts[2].getPort());<a name="line.73"></a>
+<FONT color="green">074</FONT>      }<a name="line.74"></a>
+<FONT color="green">075</FONT>    <a name="line.75"></a>
+<FONT color="green">076</FONT>      @Test<a name="line.76"></a>
+<FONT color="green">077</FONT>      public void testConfiguratorPort() {<a name="line.77"></a>
+<FONT color="green">078</FONT>        CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator("localhost");<a name="line.78"></a>
+<FONT color="green">079</FONT>        cassandraHostConfigurator.setPort(9177);<a name="line.79"></a>
+<FONT color="green">080</FONT>        CassandraHost[] cassandraHosts = cassandraHostConfigurator.buildCassandraHosts();<a name="line.80"></a>
+<FONT color="green">081</FONT>        assertEquals(9177,cassandraHosts[0].getPort());<a name="line.81"></a>
+<FONT color="green">082</FONT>      }<a name="line.82"></a>
+<FONT color="green">083</FONT>    <a name="line.83"></a>
+<FONT color="green">084</FONT>      @Test<a name="line.84"></a>
+<FONT color="green">085</FONT>      public void testConfiguratorClockResolution() {<a name="line.85"></a>
+<FONT color="green">086</FONT>        // Define my own clock resolution.<a name="line.86"></a>
+<FONT color="green">087</FONT>        class SequentialClockResolution implements ClockResolution {<a name="line.87"></a>
+<FONT color="green">088</FONT>            @Override<a name="line.88"></a>
+<FONT color="green">089</FONT>            public long createClock() {<a name="line.89"></a>
+<FONT color="green">090</FONT>                return System.currentTimeMillis() * -1;<a name="line.90"></a>
+<FONT color="green">091</FONT>            }<a name="line.91"></a>
+<FONT color="green">092</FONT>        }<a name="line.92"></a>
+<FONT color="green">093</FONT>    <a name="line.93"></a>
+<FONT color="green">094</FONT>        CassandraHostConfigurator cassandraHostConfigurator = new CassandraHostConfigurator("localhost");<a name="line.94"></a>
+<FONT color="green">095</FONT>        cassandraHostConfigurator.setClockResolution(new SequentialClockResolution());<a name="line.95"></a>
+<FONT color="green">096</FONT>        <a name="line.96"></a>
+<FONT color="green">097</FONT>        assertNotSame(CassandraHostConfigurator.DEF_CLOCK_RESOLUTION, cassandraHostConfigurator.getClockResolution());<a name="line.97"></a>
+<FONT color="green">098</FONT>      }<a name="line.98"></a>
+<FONT color="green">099</FONT>    }<a name="line.99"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

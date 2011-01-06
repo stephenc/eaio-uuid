@@ -1,0 +1,126 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.cassandra.model;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import java.nio.ByteBuffer;<a name="line.3"></a>
+<FONT color="green">004</FONT>    <a name="line.4"></a>
+<FONT color="green">005</FONT>    import me.prettyprint.cassandra.utils.Assert;<a name="line.5"></a>
+<FONT color="green">006</FONT>    import me.prettyprint.hector.api.Serializer;<a name="line.6"></a>
+<FONT color="green">007</FONT>    <a name="line.7"></a>
+<FONT color="green">008</FONT>    import org.apache.cassandra.thrift.KeyRange;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    /**<a name="line.10"></a>
+<FONT color="green">011</FONT>     * A helper class for range queries.<a name="line.11"></a>
+<FONT color="green">012</FONT>     * &lt;p&gt;<a name="line.12"></a>
+<FONT color="green">013</FONT>     * We allow only keys range, no tokens range since if you want to use tokens and you're not hadoop<a name="line.13"></a>
+<FONT color="green">014</FONT>     * then you're (probably) doing something wrong (JE)<a name="line.14"></a>
+<FONT color="green">015</FONT>     *<a name="line.15"></a>
+<FONT color="green">016</FONT>     * @author Ran Tavory<a name="line.16"></a>
+<FONT color="green">017</FONT>     *<a name="line.17"></a>
+<FONT color="green">018</FONT>     */<a name="line.18"></a>
+<FONT color="green">019</FONT>    public final class HKeyRange&lt;K&gt; {<a name="line.19"></a>
+<FONT color="green">020</FONT>    <a name="line.20"></a>
+<FONT color="green">021</FONT>      private K startKey;<a name="line.21"></a>
+<FONT color="green">022</FONT>      private K endKey;<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>      private int rowCount = 100;<a name="line.24"></a>
+<FONT color="green">025</FONT>    <a name="line.25"></a>
+<FONT color="green">026</FONT>      private final Serializer&lt;K&gt; keySerializer;<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>      public HKeyRange(Serializer&lt;K&gt; keySerializer) {<a name="line.28"></a>
+<FONT color="green">029</FONT>        Assert.notNull(keySerializer, "keySerializer is null");<a name="line.29"></a>
+<FONT color="green">030</FONT>        this.keySerializer = keySerializer;<a name="line.30"></a>
+<FONT color="green">031</FONT>      }<a name="line.31"></a>
+<FONT color="green">032</FONT>    <a name="line.32"></a>
+<FONT color="green">033</FONT>      public HKeyRange&lt;K&gt; setKeys(K start, K end) {<a name="line.33"></a>
+<FONT color="green">034</FONT>        this.startKey = start;<a name="line.34"></a>
+<FONT color="green">035</FONT>        this.endKey = end;<a name="line.35"></a>
+<FONT color="green">036</FONT>        return this;<a name="line.36"></a>
+<FONT color="green">037</FONT>      }<a name="line.37"></a>
+<FONT color="green">038</FONT>      public HKeyRange&lt;K&gt; setRowCount(int rowCount) {<a name="line.38"></a>
+<FONT color="green">039</FONT>        this.rowCount = rowCount;<a name="line.39"></a>
+<FONT color="green">040</FONT>        return this;<a name="line.40"></a>
+<FONT color="green">041</FONT>      }<a name="line.41"></a>
+<FONT color="green">042</FONT>    <a name="line.42"></a>
+<FONT color="green">043</FONT>      /**<a name="line.43"></a>
+<FONT color="green">044</FONT>       *<a name="line.44"></a>
+<FONT color="green">045</FONT>       * @return The thrift representation of this object<a name="line.45"></a>
+<FONT color="green">046</FONT>       */<a name="line.46"></a>
+<FONT color="green">047</FONT>      public KeyRange toThrift() {<a name="line.47"></a>
+<FONT color="green">048</FONT>        KeyRange keyRange = new KeyRange(rowCount);<a name="line.48"></a>
+<FONT color="green">049</FONT>        keyRange.setStart_key(startKey == null ? ByteBuffer.wrap(new byte[0]) :<a name="line.49"></a>
+<FONT color="green">050</FONT>            keySerializer.toByteBuffer(startKey));<a name="line.50"></a>
+<FONT color="green">051</FONT>        keyRange.setEnd_key(endKey == null ? ByteBuffer.wrap(new byte[0]) :<a name="line.51"></a>
+<FONT color="green">052</FONT>            keySerializer.toByteBuffer(endKey));<a name="line.52"></a>
+<FONT color="green">053</FONT>        return keyRange;<a name="line.53"></a>
+<FONT color="green">054</FONT>      }<a name="line.54"></a>
+<FONT color="green">055</FONT>    <a name="line.55"></a>
+<FONT color="green">056</FONT>      @Override<a name="line.56"></a>
+<FONT color="green">057</FONT>      public String toString() {<a name="line.57"></a>
+<FONT color="green">058</FONT>        return "HKeyRange(start:" + startKey + ",end:" + endKey + "," + ")";<a name="line.58"></a>
+<FONT color="green">059</FONT>      }<a name="line.59"></a>
+<FONT color="green">060</FONT>    }<a name="line.60"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,87 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.hector.api.query;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    <a name="line.3"></a>
+<FONT color="green">004</FONT>    /**<a name="line.4"></a>
+<FONT color="green">005</FONT>     * Counts sub columns for a of a key and a super column in a super column family<a name="line.5"></a>
+<FONT color="green">006</FONT>     *<a name="line.6"></a>
+<FONT color="green">007</FONT>     * @author Ran Tavory<a name="line.7"></a>
+<FONT color="green">008</FONT>     *<a name="line.8"></a>
+<FONT color="green">009</FONT>     * @param &lt;SN&gt; super column name tyoe<a name="line.9"></a>
+<FONT color="green">010</FONT>     */<a name="line.10"></a>
+<FONT color="green">011</FONT>    public interface SubCountQuery&lt;K, SN, N&gt; extends Query&lt;Integer&gt;{<a name="line.11"></a>
+<FONT color="green">012</FONT>    <a name="line.12"></a>
+<FONT color="green">013</FONT>      SubCountQuery&lt;K, SN, N&gt; setSuperColumn(SN sc);<a name="line.13"></a>
+<FONT color="green">014</FONT>    <a name="line.14"></a>
+<FONT color="green">015</FONT>      SubCountQuery&lt;K, SN, N&gt; setKey(K key);<a name="line.15"></a>
+<FONT color="green">016</FONT>    <a name="line.16"></a>
+<FONT color="green">017</FONT>      SubCountQuery&lt;K, SN, N&gt; setColumnFamily(String cf);<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>      SubCountQuery&lt;K, SN, N&gt; setRange(N start, N finish, int count);<a name="line.19"></a>
+<FONT color="green">020</FONT>    <a name="line.20"></a>
+<FONT color="green">021</FONT>    }<a name="line.21"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

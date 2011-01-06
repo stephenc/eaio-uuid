@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.5" timestamp="2011-01-06T14:46:02.350">
+<file name="/home/stephenc/src/hector/target/checkout/core/src/main/java/me/prettyprint/cassandra/jndi/CassandraClientJndiResourcePool.java">
+<violation beginline="24" endline="27" begincolumn="10" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="me.prettyprint.cassandra.jndi" class="CassandraClientJndiResourcePool" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused constructor parameters such as 'port'.
+</violation>
+<violation beginline="24" endline="27" begincolumn="10" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="me.prettyprint.cassandra.jndi" class="CassandraClientJndiResourcePool" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused constructor parameters such as 'url'.
+</violation>
+</file>
+<file name="/home/stephenc/src/hector/target/checkout/core/src/main/java/me/prettyprint/cassandra/service/JndiCassandraClientFactory.java">
+<violation beginline="21" endline="24" begincolumn="10" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="me.prettyprint.cassandra.service" class="JndiCassandraClientFactory" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused constructor parameters such as 'port'.
+</violation>
+<violation beginline="21" endline="24" begincolumn="10" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="me.prettyprint.cassandra.service" class="JndiCassandraClientFactory" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused constructor parameters such as 'url'.
+</violation>
+</file>
+<file name="/home/stephenc/src/hector/target/checkout/core/src/main/java/me/prettyprint/hector/api/Keyspace.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="50" rule="UnusedImports" ruleset="Import Statement Rules" package="me.prettyprint.hector.api" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'me.prettyprint.cassandra.service.Operation'
+</violation>
+<violation beginline="4" endline="4" begincolumn="1" endcolumn="60" rule="UnusedImports" ruleset="Import Statement Rules" package="me.prettyprint.hector.api" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'me.prettyprint.hector.api.exceptions.HectorException'
+</violation>
+</file>
+</pmd>

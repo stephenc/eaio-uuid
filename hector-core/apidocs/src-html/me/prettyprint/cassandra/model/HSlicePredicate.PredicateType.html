@@ -1,0 +1,217 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.cassandra.model;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import java.nio.ByteBuffer;<a name="line.3"></a>
+<FONT color="green">004</FONT>    import java.util.ArrayList;<a name="line.4"></a>
+<FONT color="green">005</FONT>    import java.util.Arrays;<a name="line.5"></a>
+<FONT color="green">006</FONT>    import java.util.Collection;<a name="line.6"></a>
+<FONT color="green">007</FONT>    import java.util.Collections;<a name="line.7"></a>
+<FONT color="green">008</FONT>    import java.util.List;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    import me.prettyprint.cassandra.utils.Assert;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import me.prettyprint.hector.api.Serializer;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import me.prettyprint.hector.api.exceptions.HectorException;<a name="line.12"></a>
+<FONT color="green">013</FONT>    <a name="line.13"></a>
+<FONT color="green">014</FONT>    import org.apache.cassandra.thrift.SlicePredicate;<a name="line.14"></a>
+<FONT color="green">015</FONT>    import org.apache.cassandra.thrift.SliceRange;<a name="line.15"></a>
+<FONT color="green">016</FONT>    <a name="line.16"></a>
+<FONT color="green">017</FONT>    /**<a name="line.17"></a>
+<FONT color="green">018</FONT>     * Hector's version of cassandra SlicePredicate<a name="line.18"></a>
+<FONT color="green">019</FONT>     *<a name="line.19"></a>
+<FONT color="green">020</FONT>     * @author Ran Tavory<a name="line.20"></a>
+<FONT color="green">021</FONT>     *<a name="line.21"></a>
+<FONT color="green">022</FONT>     */<a name="line.22"></a>
+<FONT color="green">023</FONT>    public final class HSlicePredicate&lt;N&gt; {<a name="line.23"></a>
+<FONT color="green">024</FONT>    <a name="line.24"></a>
+<FONT color="green">025</FONT>      protected Collection&lt;N&gt; columnNames;<a name="line.25"></a>
+<FONT color="green">026</FONT>      protected N start;<a name="line.26"></a>
+<FONT color="green">027</FONT>      protected N finish;<a name="line.27"></a>
+<FONT color="green">028</FONT>      protected boolean reversed;<a name="line.28"></a>
+<FONT color="green">029</FONT>      protected int count;<a name="line.29"></a>
+<FONT color="green">030</FONT>      /** Is count already set? */<a name="line.30"></a>
+<FONT color="green">031</FONT>      private boolean countSet = false;<a name="line.31"></a>
+<FONT color="green">032</FONT>      protected final Serializer&lt;N&gt; columnNameSerializer;<a name="line.32"></a>
+<FONT color="green">033</FONT>      protected enum PredicateType {Unknown, ColumnNames, Range};<a name="line.33"></a>
+<FONT color="green">034</FONT>      protected PredicateType predicateType = PredicateType.Unknown;<a name="line.34"></a>
+<FONT color="green">035</FONT>    <a name="line.35"></a>
+<FONT color="green">036</FONT>      public HSlicePredicate(Serializer&lt;N&gt; columnNameSerializer) {<a name="line.36"></a>
+<FONT color="green">037</FONT>        Assert.notNull(columnNameSerializer, "columnNameSerializer can't be null");<a name="line.37"></a>
+<FONT color="green">038</FONT>        this.columnNameSerializer = columnNameSerializer;<a name="line.38"></a>
+<FONT color="green">039</FONT>      }<a name="line.39"></a>
+<FONT color="green">040</FONT>    <a name="line.40"></a>
+<FONT color="green">041</FONT>      /**<a name="line.41"></a>
+<FONT color="green">042</FONT>       * Sets the column names to be retrieved by this query<a name="line.42"></a>
+<FONT color="green">043</FONT>       *<a name="line.43"></a>
+<FONT color="green">044</FONT>       * @param columns<a name="line.44"></a>
+<FONT color="green">045</FONT>       *          a list of column names<a name="line.45"></a>
+<FONT color="green">046</FONT>       */<a name="line.46"></a>
+<FONT color="green">047</FONT>      public HSlicePredicate&lt;N&gt; setColumnNames(N... columnNames) {<a name="line.47"></a>
+<FONT color="green">048</FONT>        return setColumnNames(Arrays.asList(columnNames));<a name="line.48"></a>
+<FONT color="green">049</FONT>      }<a name="line.49"></a>
+<FONT color="green">050</FONT>      <a name="line.50"></a>
+<FONT color="green">051</FONT>      /**<a name="line.51"></a>
+<FONT color="green">052</FONT>       * Same as varargs signature, except we take a collection<a name="line.52"></a>
+<FONT color="green">053</FONT>       *<a name="line.53"></a>
+<FONT color="green">054</FONT>       * @param columns<a name="line.54"></a>
+<FONT color="green">055</FONT>       *          a list of column names<a name="line.55"></a>
+<FONT color="green">056</FONT>       */<a name="line.56"></a>
+<FONT color="green">057</FONT>      public HSlicePredicate&lt;N&gt; setColumnNames(Collection&lt;N&gt; columnNames) {<a name="line.57"></a>
+<FONT color="green">058</FONT>        this.columnNames = columnNames;<a name="line.58"></a>
+<FONT color="green">059</FONT>        predicateType = PredicateType.ColumnNames;<a name="line.59"></a>
+<FONT color="green">060</FONT>        return this;<a name="line.60"></a>
+<FONT color="green">061</FONT>      }<a name="line.61"></a>
+<FONT color="green">062</FONT>    <a name="line.62"></a>
+<FONT color="green">063</FONT>      /**<a name="line.63"></a>
+<FONT color="green">064</FONT>       * Allows the use of returning just the keys. This avoids de-serialization of row data<a name="line.64"></a>
+<FONT color="green">065</FONT>       * and can be a huge optimization in some use cases<a name="line.65"></a>
+<FONT color="green">066</FONT>       *<a name="line.66"></a>
+<FONT color="green">067</FONT>       */<a name="line.67"></a>
+<FONT color="green">068</FONT>      public HSlicePredicate&lt;N&gt; setKeysOnlyPredicate() {<a name="line.68"></a>
+<FONT color="green">069</FONT>        this.columnNames = new ArrayList&lt;N&gt;();<a name="line.69"></a>
+<FONT color="green">070</FONT>        predicateType = PredicateType.ColumnNames;<a name="line.70"></a>
+<FONT color="green">071</FONT>        return this;<a name="line.71"></a>
+<FONT color="green">072</FONT>      }<a name="line.72"></a>
+<FONT color="green">073</FONT>    <a name="line.73"></a>
+<FONT color="green">074</FONT>      /**<a name="line.74"></a>
+<FONT color="green">075</FONT>       * Set a predicate of start/finish to retrieve a list of columns in this range.<a name="line.75"></a>
+<FONT color="green">076</FONT>       * Either start and or finish can be null which will toggle the underlying predicate to<a name="line.76"></a>
+<FONT color="green">077</FONT>       * use an empty byte[]<a name="line.77"></a>
+<FONT color="green">078</FONT>       * @param start<a name="line.78"></a>
+<FONT color="green">079</FONT>       *          Start key<a name="line.79"></a>
+<FONT color="green">080</FONT>       * @param finish<a name="line.80"></a>
+<FONT color="green">081</FONT>       *          End key<a name="line.81"></a>
+<FONT color="green">082</FONT>       * @param reversed<a name="line.82"></a>
+<FONT color="green">083</FONT>       * @param count<a name="line.83"></a>
+<FONT color="green">084</FONT>       * @return<a name="line.84"></a>
+<FONT color="green">085</FONT>       */<a name="line.85"></a>
+<FONT color="green">086</FONT>      public HSlicePredicate&lt;N&gt; setRange(N start, N finish, boolean reversed, int count) {<a name="line.86"></a>
+<FONT color="green">087</FONT>        this.start = start;<a name="line.87"></a>
+<FONT color="green">088</FONT>        this.finish = finish;<a name="line.88"></a>
+<FONT color="green">089</FONT>        this.reversed = reversed;<a name="line.89"></a>
+<FONT color="green">090</FONT>        this.count = count;<a name="line.90"></a>
+<FONT color="green">091</FONT>        countSet = true;<a name="line.91"></a>
+<FONT color="green">092</FONT>        predicateType = PredicateType.Range;<a name="line.92"></a>
+<FONT color="green">093</FONT>        return this;<a name="line.93"></a>
+<FONT color="green">094</FONT>      }<a name="line.94"></a>
+<FONT color="green">095</FONT>    <a name="line.95"></a>
+<FONT color="green">096</FONT>      public Collection&lt;N&gt; getColumnNames() {<a name="line.96"></a>
+<FONT color="green">097</FONT>        return Collections.unmodifiableCollection(columnNames);<a name="line.97"></a>
+<FONT color="green">098</FONT>      }<a name="line.98"></a>
+<FONT color="green">099</FONT>    <a name="line.99"></a>
+<FONT color="green">100</FONT>      /**<a name="line.100"></a>
+<FONT color="green">101</FONT>       * Will throw a runtime exception if neither columnsNames nor count were set.<a name="line.101"></a>
+<FONT color="green">102</FONT>       * @return<a name="line.102"></a>
+<FONT color="green">103</FONT>       */<a name="line.103"></a>
+<FONT color="green">104</FONT>      public SlicePredicate toThrift() {<a name="line.104"></a>
+<FONT color="green">105</FONT>        SlicePredicate pred = new SlicePredicate();<a name="line.105"></a>
+<FONT color="green">106</FONT>    <a name="line.106"></a>
+<FONT color="green">107</FONT>        switch (predicateType) {<a name="line.107"></a>
+<FONT color="green">108</FONT>        case ColumnNames:<a name="line.108"></a>
+<FONT color="green">109</FONT>          if (columnNames == null ) {<a name="line.109"></a>
+<FONT color="green">110</FONT>            return null;<a name="line.110"></a>
+<FONT color="green">111</FONT>          }<a name="line.111"></a>
+<FONT color="green">112</FONT>          pred.setColumn_names(toThriftColumnNames(columnNames));<a name="line.112"></a>
+<FONT color="green">113</FONT>          break;<a name="line.113"></a>
+<FONT color="green">114</FONT>        case Range:<a name="line.114"></a>
+<FONT color="green">115</FONT>          Assert.isTrue(countSet, "Count was not set, neither were column-names set, can't execute");<a name="line.115"></a>
+<FONT color="green">116</FONT>          SliceRange range = new SliceRange(findBytes(start), findBytes(finish), reversed, count);<a name="line.116"></a>
+<FONT color="green">117</FONT>          pred.setSlice_range(range);<a name="line.117"></a>
+<FONT color="green">118</FONT>          break;<a name="line.118"></a>
+<FONT color="green">119</FONT>        case Unknown:<a name="line.119"></a>
+<FONT color="green">120</FONT>        default:<a name="line.120"></a>
+<FONT color="green">121</FONT>          throw new HectorException(<a name="line.121"></a>
+<FONT color="green">122</FONT>              "Neither column names nor range were set, this is an invalid slice predicate");<a name="line.122"></a>
+<FONT color="green">123</FONT>        }<a name="line.123"></a>
+<FONT color="green">124</FONT>        return pred;<a name="line.124"></a>
+<FONT color="green">125</FONT>      }<a name="line.125"></a>
+<FONT color="green">126</FONT>    <a name="line.126"></a>
+<FONT color="green">127</FONT>      private ByteBuffer findBytes(N val) {<a name="line.127"></a>
+<FONT color="green">128</FONT>        ByteBuffer valBytes;<a name="line.128"></a>
+<FONT color="green">129</FONT>        if (val == null) {<a name="line.129"></a>
+<FONT color="green">130</FONT>          valBytes =  ByteBuffer.wrap(new byte[0]);<a name="line.130"></a>
+<FONT color="green">131</FONT>        } else {<a name="line.131"></a>
+<FONT color="green">132</FONT>          valBytes = columnNameSerializer.toByteBuffer(val);<a name="line.132"></a>
+<FONT color="green">133</FONT>        }<a name="line.133"></a>
+<FONT color="green">134</FONT>        return valBytes;<a name="line.134"></a>
+<FONT color="green">135</FONT>      }<a name="line.135"></a>
+<FONT color="green">136</FONT>    <a name="line.136"></a>
+<FONT color="green">137</FONT>      private List&lt;ByteBuffer&gt; toThriftColumnNames(Collection&lt;N&gt; clms) {<a name="line.137"></a>
+<FONT color="green">138</FONT>        List&lt;ByteBuffer&gt; ret = new ArrayList&lt;ByteBuffer&gt;(clms.size());<a name="line.138"></a>
+<FONT color="green">139</FONT>        for (N name : clms) {<a name="line.139"></a>
+<FONT color="green">140</FONT>          ret.add(columnNameSerializer.toByteBuffer(name));<a name="line.140"></a>
+<FONT color="green">141</FONT>        }<a name="line.141"></a>
+<FONT color="green">142</FONT>        return ret;<a name="line.142"></a>
+<FONT color="green">143</FONT>      }<a name="line.143"></a>
+<FONT color="green">144</FONT>    <a name="line.144"></a>
+<FONT color="green">145</FONT>      @Override<a name="line.145"></a>
+<FONT color="green">146</FONT>      public String toString() {<a name="line.146"></a>
+<FONT color="green">147</FONT>        return "HSlicePredicate("<a name="line.147"></a>
+<FONT color="green">148</FONT>            + (predicateType == PredicateType.ColumnNames ? columnNames :<a name="line.148"></a>
+<FONT color="green">149</FONT>              "cStart:" + start + ",cFinish:" + finish) + ")";<a name="line.149"></a>
+<FONT color="green">150</FONT>      }<a name="line.150"></a>
+<FONT color="green">151</FONT>    }<a name="line.151"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

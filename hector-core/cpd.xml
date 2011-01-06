@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+<duplication lines="21" tokens="130">
+<file line="150" path="/home/stephenc/src/hector/target/checkout/core/src/main/java/me/prettyprint/cassandra/service/KeyspaceServiceImpl.java"/>
+<file line="502" path="/home/stephenc/src/hector/target/checkout/core/src/main/java/me/prettyprint/cassandra/service/KeyspaceServiceImpl.java"/>
+<codefragment>
+<![CDATA[
+              predicate, getThriftCl(OperationType.READ));
+          if (keySlices == null || keySlices.isEmpty()) {
+            return new LinkedHashMap<ByteBuffer, List<Column>>(0);
+          }
+          LinkedHashMap<ByteBuffer, List<Column>> ret = new LinkedHashMap<ByteBuffer, List<Column>>(
+              keySlices.size());
+          for (KeySlice keySlice : keySlices) {
+            ret.put(ByteBuffer.wrap(keySlice.getKey()), getColumnList(keySlice.getColumns()));
+          }
+          return ret;
+        } catch (Exception e) {
+          throw xtrans.translate(e);
+        }
+      };
+    };
+    operateWithFailover(op);
+    return op.getResult();
+  }
+
+  @Override
+  public void remove(ByteBuffer key, ColumnPath columnPath) {
+]]>
+</codefragment>
+</duplication>
+</pmd-cpd>

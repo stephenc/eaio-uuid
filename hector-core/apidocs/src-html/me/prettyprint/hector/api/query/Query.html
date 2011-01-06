@@ -1,0 +1,98 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.hector.api.query;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import me.prettyprint.cassandra.model.thrift.ThriftColumnQuery;<a name="line.3"></a>
+<FONT color="green">004</FONT>    <a name="line.4"></a>
+<FONT color="green">005</FONT>    <a name="line.5"></a>
+<FONT color="green">006</FONT>    /**<a name="line.6"></a>
+<FONT color="green">007</FONT>     * The Query interface defines the common parts of all hector queries, such as {@link ThriftColumnQuery}.<a name="line.7"></a>
+<FONT color="green">008</FONT>     * &lt;p&gt;<a name="line.8"></a>
+<FONT color="green">009</FONT>     * The common usage pattern is to create a query, set the required query attributes and invoke<a name="line.9"></a>
+<FONT color="green">010</FONT>     * {@link Query#execute()} such as in the following example:<a name="line.10"></a>
+<FONT color="green">011</FONT>     * &lt;pre&gt;<a name="line.11"></a>
+<FONT color="green">012</FONT>        ColumnQuery&lt;String, String&gt; q = createColumnQuery(keyspace, serializer, serializer);<a name="line.12"></a>
+<FONT color="green">013</FONT>        Result&lt;HColumn&lt;String, String&gt;&gt; r = q.setKey(key).<a name="line.13"></a>
+<FONT color="green">014</FONT>            setName(COLUMN_NAME).<a name="line.14"></a>
+<FONT color="green">015</FONT>            setColumnFamily(CF_NAME).<a name="line.15"></a>
+<FONT color="green">016</FONT>            execute();<a name="line.16"></a>
+<FONT color="green">017</FONT>        HColumn&lt;String, String&gt; c = r.get();<a name="line.17"></a>
+<FONT color="green">018</FONT>        return c.getValue();<a name="line.18"></a>
+<FONT color="green">019</FONT>     * &lt;/pre&gt;<a name="line.19"></a>
+<FONT color="green">020</FONT>     *<a name="line.20"></a>
+<FONT color="green">021</FONT>     * Note that all query mutators, such as setName or setColumnFamily always return the Query object<a name="line.21"></a>
+<FONT color="green">022</FONT>     * so it's easy to write strings such as &lt;code&gt;q.setKey(x).setName(y).setColumnFamily(z).execute();&lt;/code&gt;<a name="line.22"></a>
+<FONT color="green">023</FONT>     *<a name="line.23"></a>
+<FONT color="green">024</FONT>     * @author Ran Tavory<a name="line.24"></a>
+<FONT color="green">025</FONT>     *<a name="line.25"></a>
+<FONT color="green">026</FONT>     * @param &lt;T&gt; Result type. For example Column or SuperColumn<a name="line.26"></a>
+<FONT color="green">027</FONT>     */<a name="line.27"></a>
+<FONT color="green">028</FONT>    public interface Query&lt;T&gt; {<a name="line.28"></a>
+<FONT color="green">029</FONT>    <a name="line.29"></a>
+<FONT color="green">030</FONT>      QueryResult&lt;T&gt; execute();<a name="line.30"></a>
+<FONT color="green">031</FONT>    <a name="line.31"></a>
+<FONT color="green">032</FONT>    }<a name="line.32"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

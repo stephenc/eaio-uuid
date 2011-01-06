@@ -1,0 +1,124 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.cassandra.serializers;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import java.io.ByteArrayInputStream;<a name="line.3"></a>
+<FONT color="green">004</FONT>    import java.io.ByteArrayOutputStream;<a name="line.4"></a>
+<FONT color="green">005</FONT>    import java.io.IOException;<a name="line.5"></a>
+<FONT color="green">006</FONT>    import java.io.ObjectInputStream;<a name="line.6"></a>
+<FONT color="green">007</FONT>    import java.io.ObjectOutputStream;<a name="line.7"></a>
+<FONT color="green">008</FONT>    import java.nio.ByteBuffer;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    import me.prettyprint.hector.api.Serializer;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import me.prettyprint.hector.api.exceptions.HectorSerializationException;<a name="line.11"></a>
+<FONT color="green">012</FONT>    <a name="line.12"></a>
+<FONT color="green">013</FONT>    /**<a name="line.13"></a>
+<FONT color="green">014</FONT>     * The ObjectSerializer is used to turn objects into their binary representations.<a name="line.14"></a>
+<FONT color="green">015</FONT>     *<a name="line.15"></a>
+<FONT color="green">016</FONT>     * @author Bozhidar Bozhanov<a name="line.16"></a>
+<FONT color="green">017</FONT>     *<a name="line.17"></a>
+<FONT color="green">018</FONT>     */<a name="line.18"></a>
+<FONT color="green">019</FONT>    public class ObjectSerializer extends AbstractSerializer&lt;Object&gt; implements Serializer&lt;Object&gt; {<a name="line.19"></a>
+<FONT color="green">020</FONT>    <a name="line.20"></a>
+<FONT color="green">021</FONT>      private static final ObjectSerializer INSTANCE = new ObjectSerializer();<a name="line.21"></a>
+<FONT color="green">022</FONT>    <a name="line.22"></a>
+<FONT color="green">023</FONT>      @Override<a name="line.23"></a>
+<FONT color="green">024</FONT>      public ByteBuffer toByteBuffer(Object obj) {<a name="line.24"></a>
+<FONT color="green">025</FONT>        try {<a name="line.25"></a>
+<FONT color="green">026</FONT>          ByteArrayOutputStream baos = new ByteArrayOutputStream();<a name="line.26"></a>
+<FONT color="green">027</FONT>          ObjectOutputStream oos = new ObjectOutputStream(baos);<a name="line.27"></a>
+<FONT color="green">028</FONT>          oos.writeObject(obj);<a name="line.28"></a>
+<FONT color="green">029</FONT>          oos.close();<a name="line.29"></a>
+<FONT color="green">030</FONT>    <a name="line.30"></a>
+<FONT color="green">031</FONT>          return ByteBuffer.wrap(baos.toByteArray());<a name="line.31"></a>
+<FONT color="green">032</FONT>        } catch (IOException ex) {<a name="line.32"></a>
+<FONT color="green">033</FONT>          throw new RuntimeException(ex);<a name="line.33"></a>
+<FONT color="green">034</FONT>        }<a name="line.34"></a>
+<FONT color="green">035</FONT>      }<a name="line.35"></a>
+<FONT color="green">036</FONT>    <a name="line.36"></a>
+<FONT color="green">037</FONT>      @Override<a name="line.37"></a>
+<FONT color="green">038</FONT>      public Object fromByteBuffer(ByteBuffer bytes) {<a name="line.38"></a>
+<FONT color="green">039</FONT>        if (bytes == null || !bytes.hasRemaining()) {<a name="line.39"></a>
+<FONT color="green">040</FONT>          return null;<a name="line.40"></a>
+<FONT color="green">041</FONT>        }<a name="line.41"></a>
+<FONT color="green">042</FONT>        try {<a name="line.42"></a>
+<FONT color="green">043</FONT>          ByteArrayInputStream bais = new ByteArrayInputStream(bytes.array());<a name="line.43"></a>
+<FONT color="green">044</FONT>          ObjectInputStream ois = new ObjectInputStream(bais);<a name="line.44"></a>
+<FONT color="green">045</FONT>          Object obj = ois.readObject();<a name="line.45"></a>
+<FONT color="green">046</FONT>          ois.close();<a name="line.46"></a>
+<FONT color="green">047</FONT>    <a name="line.47"></a>
+<FONT color="green">048</FONT>          return obj;<a name="line.48"></a>
+<FONT color="green">049</FONT>        } catch (Exception ex) {<a name="line.49"></a>
+<FONT color="green">050</FONT>          throw new HectorSerializationException(ex);<a name="line.50"></a>
+<FONT color="green">051</FONT>        }<a name="line.51"></a>
+<FONT color="green">052</FONT>      }<a name="line.52"></a>
+<FONT color="green">053</FONT>    <a name="line.53"></a>
+<FONT color="green">054</FONT>      public static ObjectSerializer get() {<a name="line.54"></a>
+<FONT color="green">055</FONT>        return INSTANCE;<a name="line.55"></a>
+<FONT color="green">056</FONT>      }<a name="line.56"></a>
+<FONT color="green">057</FONT>    <a name="line.57"></a>
+<FONT color="green">058</FONT>    }<a name="line.58"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

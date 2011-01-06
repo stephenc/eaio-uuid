@@ -1,0 +1,837 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+<title>ApiV2SystemTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<pre>
+
+<a name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> me.prettyprint.hector.api;
+<a name="2" href="#2">2</a>   
+<a name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createColumn;
+<a name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createColumnQuery;
+<a name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createCountQuery;
+<a name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createKeyspace;
+<a name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createMultigetSliceQuery;
+<a name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createMultigetSubSliceQuery;
+<a name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createMultigetSuperSliceQuery;
+<a name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createMutator;
+<a name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createRangeSlicesQuery;
+<a name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createRangeSubSlicesQuery;
+<a name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createRangeSuperSlicesQuery;
+<a name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createSliceQuery;
+<a name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createSubColumnQuery;
+<a name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createSubCountQuery;
+<a name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createSubSliceQuery;
+<a name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createSuperColumn;
+<a name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createSuperColumnQuery;
+<a name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createSuperCountQuery;
+<a name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.createSuperSliceQuery;
+<a name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> me.prettyprint.hector.api.factory.HFactory.getOrCreateCluster;
+<a name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
+<a name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertNotNull;
+<a name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertNull;
+<a name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertTrue;
+<a name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.fail;
+<a name="28" href="#28">28</a>  
+<a name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a name="31" href="#31">31</a>  
+<a name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.cassandra.BaseEmbededServerSetupTest;
+<a name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.cassandra.serializers.StringSerializer;
+<a name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.ColumnSlice;
+<a name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.HColumn;
+<a name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.HSuperColumn;
+<a name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.OrderedRows;
+<a name="38" href="#38">38</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.OrderedSuperRows;
+<a name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.Row;
+<a name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.Rows;
+<a name="41" href="#41">41</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.SuperRow;
+<a name="42" href="#42">42</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.SuperRows;
+<a name="43" href="#43">43</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.beans.SuperSlice;
+<a name="44" href="#44">44</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.mutation.MutationResult;
+<a name="45" href="#45">45</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.mutation.Mutator;
+<a name="46" href="#46">46</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.ColumnQuery;
+<a name="47" href="#47">47</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.CountQuery;
+<a name="48" href="#48">48</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.MultigetSliceQuery;
+<a name="49" href="#49">49</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.MultigetSubSliceQuery;
+<a name="50" href="#50">50</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.MultigetSuperSliceQuery;
+<a name="51" href="#51">51</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.QueryResult;
+<a name="52" href="#52">52</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.RangeSlicesQuery;
+<a name="53" href="#53">53</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.RangeSubSlicesQuery;
+<a name="54" href="#54">54</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.RangeSuperSlicesQuery;
+<a name="55" href="#55">55</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.SliceQuery;
+<a name="56" href="#56">56</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.SubColumnQuery;
+<a name="57" href="#57">57</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.SubCountQuery;
+<a name="58" href="#58">58</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.SubSliceQuery;
+<a name="59" href="#59">59</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.SuperColumnQuery;
+<a name="60" href="#60">60</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.SuperCountQuery;
+<a name="61" href="#61">61</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.SuperSliceQuery;
+<a name="62" href="#62">62</a>  
+<a name="63" href="#63">63</a>  <strong class="jxr_keyword">import</strong> org.junit.After;
+<a name="64" href="#64">64</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
+<a name="65" href="#65">65</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a name="66" href="#66">66</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
+<a name="67" href="#67">67</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
+<a name="68" href="#68">68</a>  
+<a name="69" href="#69">69</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> ApiV2SystemTest <strong class="jxr_keyword">extends</strong> <a href="../../../../me/prettyprint/cassandra/BaseEmbededServerSetupTest.html">BaseEmbededServerSetupTest</a> {
+<a name="70" href="#70">70</a>  
+<a name="71" href="#71">71</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger log = LoggerFactory.getLogger(ApiV2SystemTest.<strong class="jxr_keyword">class</strong>);
+<a name="72" href="#72">72</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> String KEYSPACE = <span class="jxr_string">"Keyspace1"</span>;
+<a name="73" href="#73">73</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> StringSerializer se = <strong class="jxr_keyword">new</strong> StringSerializer();
+<a name="74" href="#74">74</a>    <strong class="jxr_keyword">private</strong> Cluster cluster;
+<a name="75" href="#75">75</a>    <strong class="jxr_keyword">private</strong> Keyspace ko;
+<a name="76" href="#76">76</a>  
+<a name="77" href="#77">77</a>    @Before
+<a name="78" href="#78">78</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setupCase() {
+<a name="79" href="#79">79</a>      cluster = getOrCreateCluster(<span class="jxr_string">"MyCluster"</span>, <span class="jxr_string">"127.0.0.1:9170"</span>);
+<a name="80" href="#80">80</a>      ko = createKeyspace(KEYSPACE, cluster);
+<a name="81" href="#81">81</a>    }
+<a name="82" href="#82">82</a>  
+<a name="83" href="#83">83</a>    @After
+<a name="84" href="#84">84</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> teardownCase() {
+<a name="85" href="#85">85</a>      ko = <strong class="jxr_keyword">null</strong>;
+<a name="86" href="#86">86</a>      cluster = <strong class="jxr_keyword">null</strong>;
+<a name="87" href="#87">87</a>    }
+<a name="88" href="#88">88</a>  
+<a name="89" href="#89">89</a>    @Test
+<a name="90" href="#90">90</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testInsertGetRemove() {
+<a name="91" href="#91">91</a>      String cf = <span class="jxr_string">"Standard1"</span>;
+<a name="92" href="#92">92</a>  
+<a name="93" href="#93">93</a>      Mutator&lt;String&gt; m = createMutator(ko, se);
+<a name="94" href="#94">94</a>      MutationResult mr = m.insert(<span class="jxr_string">"testInsertGetRemove"</span>, cf,
+<a name="95" href="#95">95</a>          createColumn(<span class="jxr_string">"testInsertGetRemove"</span>, <span class="jxr_string">"testInsertGetRemove_value_"</span>, se, se));
+<a name="96" href="#96">96</a>  
+<a name="97" href="#97">97</a>      <em class="jxr_comment">// Check the mutation result metadata</em>
+<a name="98" href="#98">98</a>      <em class="jxr_comment">// assertEquals("127.0.0.1:9170", mr.getHostUsed());</em>
+<a name="99" href="#99">99</a>      assertTrue(<span class="jxr_string">"Time should be &gt; 0"</span>, mr.getExecutionTimeMicro() &gt; 0);
+<a name="100" href="#100">100</a> 
+<a name="101" href="#101">101</a>     log.debug(<span class="jxr_string">"insert execution time: {}"</span>, mr.getExecutionTimeMicro());
+<a name="102" href="#102">102</a> 
+<a name="103" href="#103">103</a>     <em class="jxr_comment">// get value</em>
+<a name="104" href="#104">104</a>     ColumnQuery&lt;String, String, String&gt; q = createColumnQuery(ko, se, se, se);
+<a name="105" href="#105">105</a>     q.setName(<span class="jxr_string">"testInsertGetRemove"</span>).setColumnFamily(cf);
+<a name="106" href="#106">106</a>     QueryResult&lt;HColumn&lt;String, String&gt;&gt; r = q.setKey(<span class="jxr_string">"testInsertGetRemove"</span>).execute();
+<a name="107" href="#107">107</a>     assertNotNull(r);
+<a name="108" href="#108">108</a> 
+<a name="109" href="#109">109</a>     HColumn&lt;String, String&gt; c = r.get();
+<a name="110" href="#110">110</a>     assertNotNull(c);
+<a name="111" href="#111">111</a>     String value = c.getValue();
+<a name="112" href="#112">112</a>     assertEquals(<span class="jxr_string">"testInsertGetRemove_value_"</span>, value);
+<a name="113" href="#113">113</a>     String name = c.getName();
+<a name="114" href="#114">114</a>     assertEquals(<span class="jxr_string">"testInsertGetRemove"</span>, name);
+<a name="115" href="#115">115</a>     assertEquals(q, r.getQuery());
+<a name="116" href="#116">116</a>     assertTrue(<span class="jxr_string">"Time should be &gt; 0"</span>, r.getExecutionTimeMicro() &gt; 0);
+<a name="117" href="#117">117</a> 
+<a name="118" href="#118">118</a>     <em class="jxr_comment">// remove value</em>
+<a name="119" href="#119">119</a>     m = createMutator(ko, se);
+<a name="120" href="#120">120</a>     MutationResult mr2 = m.delete(<span class="jxr_string">"testInsertGetRemove"</span>, cf, <span class="jxr_string">"testInsertGetRemove"</span>, se);
+<a name="121" href="#121">121</a>     assertTrue(<span class="jxr_string">"Time should be &gt; 0"</span>, mr2.getExecutionTimeMicro() &gt; 0);
+<a name="122" href="#122">122</a> 
+<a name="123" href="#123">123</a>     <em class="jxr_comment">// get already removed value</em>
+<a name="124" href="#124">124</a>     ColumnQuery&lt;String, String, String&gt; q2 = createColumnQuery(ko, se, se, se);
+<a name="125" href="#125">125</a>     q2.setName(<span class="jxr_string">"testInsertGetRemove"</span>).setColumnFamily(cf);
+<a name="126" href="#126">126</a>     QueryResult&lt;HColumn&lt;String, String&gt;&gt; r2 = q2.setKey(<span class="jxr_string">"testInsertGetRemove"</span>).execute();
+<a name="127" href="#127">127</a>     assertNotNull(r2);
+<a name="128" href="#128">128</a>     assertNull(<span class="jxr_string">"Value should have been deleted"</span>, r2.get());
+<a name="129" href="#129">129</a>   }
+<a name="130" href="#130">130</a> 
+<a name="131" href="#131">131</a>   @Test
+<a name="132" href="#132">132</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testBatchInsertGetRemove() {
+<a name="133" href="#133">133</a>     String cf = <span class="jxr_string">"Standard1"</span>;
+<a name="134" href="#134">134</a> 
+<a name="135" href="#135">135</a>     Mutator&lt;String&gt; m = createMutator(ko, se);
+<a name="136" href="#136">136</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 5; i++) {
+<a name="137" href="#137">137</a>       m.addInsertion(<span class="jxr_string">"testInsertGetRemove"</span> + i, cf,
+<a name="138" href="#138">138</a>           createColumn(<span class="jxr_string">"testInsertGetRemove"</span>, <span class="jxr_string">"testInsertGetRemove_value_"</span> + i, se, se));
+<a name="139" href="#139">139</a>     }
+<a name="140" href="#140">140</a>     m.execute();
+<a name="141" href="#141">141</a> 
+<a name="142" href="#142">142</a>     <em class="jxr_comment">// get value</em>
+<a name="143" href="#143">143</a>     ColumnQuery&lt;String, String, String&gt; q = createColumnQuery(ko, se, se, se);
+<a name="144" href="#144">144</a>     q.setName(<span class="jxr_string">"testInsertGetRemove"</span>).setColumnFamily(cf);
+<a name="145" href="#145">145</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 5; i++) {
+<a name="146" href="#146">146</a>       QueryResult&lt;HColumn&lt;String, String&gt;&gt; r = q.setKey(<span class="jxr_string">"testInsertGetRemove"</span> + i).execute();
+<a name="147" href="#147">147</a>       assertNotNull(r);
+<a name="148" href="#148">148</a>       HColumn&lt;String, String&gt; c = r.get();
+<a name="149" href="#149">149</a>       assertNotNull(c);
+<a name="150" href="#150">150</a>       String value = c.getValue();
+<a name="151" href="#151">151</a>       assertEquals(<span class="jxr_string">"testInsertGetRemove_value_"</span> + i, value);
+<a name="152" href="#152">152</a>     }
+<a name="153" href="#153">153</a> 
+<a name="154" href="#154">154</a>     <em class="jxr_comment">// remove value</em>
+<a name="155" href="#155">155</a>     m = createMutator(ko, se);
+<a name="156" href="#156">156</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 5; i++) {
+<a name="157" href="#157">157</a>       m.addDeletion(<span class="jxr_string">"testInsertGetRemove"</span> + i, cf, <span class="jxr_string">"testInsertGetRemove"</span>, se);
+<a name="158" href="#158">158</a>     }
+<a name="159" href="#159">159</a>     m.execute();
+<a name="160" href="#160">160</a> 
+<a name="161" href="#161">161</a>     <em class="jxr_comment">// get already removed value</em>
+<a name="162" href="#162">162</a>     ColumnQuery&lt;String, String, String&gt; q2 = createColumnQuery(ko, se, se, se);
+<a name="163" href="#163">163</a>     q2.setName(<span class="jxr_string">"testInsertGetRemove"</span>).setColumnFamily(cf);
+<a name="164" href="#164">164</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 5; i++) {
+<a name="165" href="#165">165</a>       QueryResult&lt;HColumn&lt;String, String&gt;&gt; r = q2.setKey(<span class="jxr_string">"testInsertGetRemove"</span> + i).execute();
+<a name="166" href="#166">166</a>       assertNotNull(r);
+<a name="167" href="#167">167</a>       assertNull(<span class="jxr_string">"Value should have been deleted"</span>, r.get());
+<a name="168" href="#168">168</a>     }
+<a name="169" href="#169">169</a>   }
+<a name="170" href="#170">170</a> 
+<a name="171" href="#171">171</a>   @Test
+<a name="172" href="#172">172</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSuperInsertGetRemove() {
+<a name="173" href="#173">173</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="174" href="#174">174</a> 
+<a name="175" href="#175">175</a>     Mutator&lt;String&gt; m = createMutator(ko, se);
+<a name="176" href="#176">176</a> 
+<a name="177" href="#177">177</a>     @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a name="178" href="#178">178</a>     <em class="jxr_comment">// aye, varargs and generics aren't good friends...</em>
+<a name="179" href="#179">179</a>     List&lt;HColumn&lt;String, String&gt;&gt; columns = Arrays.asList(createColumn(<span class="jxr_string">"name1"</span>, <span class="jxr_string">"value1"</span>, se, se),
+<a name="180" href="#180">180</a>         createColumn(<span class="jxr_string">"name2"</span>, <span class="jxr_string">"value2"</span>, se, se));
+<a name="181" href="#181">181</a>     m.insert(<span class="jxr_string">"testSuperInsertGetRemove"</span>, cf,
+<a name="182" href="#182">182</a>         createSuperColumn(<span class="jxr_string">"testSuperInsertGetRemove"</span>, columns, se, se, se));
+<a name="183" href="#183">183</a> 
+<a name="184" href="#184">184</a>     <em class="jxr_comment">// get value</em>
+<a name="185" href="#185">185</a>     SuperColumnQuery&lt;String, String, String, String&gt; q = createSuperColumnQuery(ko, se, se, se, se);
+<a name="186" href="#186">186</a>     q.setSuperName(<span class="jxr_string">"testSuperInsertGetRemove"</span>).setColumnFamily(cf);
+<a name="187" href="#187">187</a>     QueryResult&lt;HSuperColumn&lt;String, String, String&gt;&gt; r = q.setKey(<span class="jxr_string">"testSuperInsertGetRemove"</span>).execute();
+<a name="188" href="#188">188</a>     assertNotNull(r);
+<a name="189" href="#189">189</a>     HSuperColumn&lt;String, String, String&gt; sc = r.get();
+<a name="190" href="#190">190</a>     assertNotNull(sc);
+<a name="191" href="#191">191</a>     assertEquals(2, sc.getSize());
+<a name="192" href="#192">192</a>     HColumn&lt;String, String&gt; c = sc.get(0);
+<a name="193" href="#193">193</a>     String value = c.getValue();
+<a name="194" href="#194">194</a>     assertEquals(<span class="jxr_string">"value1"</span>, value);
+<a name="195" href="#195">195</a>     String name = c.getName();
+<a name="196" href="#196">196</a>     assertEquals(<span class="jxr_string">"name1"</span>, name);
+<a name="197" href="#197">197</a> 
+<a name="198" href="#198">198</a>     HColumn&lt;String, String&gt; c2 = sc.get(1);
+<a name="199" href="#199">199</a>     assertEquals(<span class="jxr_string">"name2"</span>, c2.getName());
+<a name="200" href="#200">200</a>     assertEquals(<span class="jxr_string">"value2"</span>, c2.getValue());
+<a name="201" href="#201">201</a> 
+<a name="202" href="#202">202</a>     <em class="jxr_comment">// remove value</em>
+<a name="203" href="#203">203</a>     m = createMutator(ko, se);
+<a name="204" href="#204">204</a>     m.subDelete(<span class="jxr_string">"testSuperInsertGetRemove"</span>, cf, <span class="jxr_string">"testSuperInsertGetRemove"</span>, <strong class="jxr_keyword">null</strong>, se, se);
+<a name="205" href="#205">205</a> 
+<a name="206" href="#206">206</a>     <em class="jxr_comment">// test after removal</em>
+<a name="207" href="#207">207</a>     r = q.execute();
+<a name="208" href="#208">208</a>     sc = r.get();
+<a name="209" href="#209">209</a>     assertNull(sc);
+<a name="210" href="#210">210</a>   }
+<a name="211" href="#211">211</a> 
+<a name="212" href="#212">212</a>   @Test
+<a name="213" href="#213">213</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSubColumnQuery() {
+<a name="214" href="#214">214</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="215" href="#215">215</a> 
+<a name="216" href="#216">216</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertSuperColumns(cf, 1, <span class="jxr_string">"testSubColumnQuery"</span>, 1,
+<a name="217" href="#217">217</a>         <span class="jxr_string">"testSubColumnQuerySuperColumn"</span>);
+<a name="218" href="#218">218</a> 
+<a name="219" href="#219">219</a>     <em class="jxr_comment">// get value</em>
+<a name="220" href="#220">220</a>     SubColumnQuery&lt;String,String, String, String&gt; q = createSubColumnQuery(ko, se, se, se, se);
+<a name="221" href="#221">221</a>     q.setSuperColumn(<span class="jxr_string">"testSubColumnQuerySuperColumn0"</span>).setColumn(<span class="jxr_string">"c000"</span>).setColumnFamily(cf);
+<a name="222" href="#222">222</a>     QueryResult&lt;HColumn&lt;String, String&gt;&gt; r = q.setKey(<span class="jxr_string">"testSubColumnQuery0"</span>).execute();
+<a name="223" href="#223">223</a>     assertNotNull(r);
+<a name="224" href="#224">224</a>     HColumn&lt;String, String&gt; c = r.get();
+<a name="225" href="#225">225</a>     assertNotNull(c);
+<a name="226" href="#226">226</a>     String value = c.getValue();
+<a name="227" href="#227">227</a>     assertEquals(<span class="jxr_string">"v000"</span>, value);
+<a name="228" href="#228">228</a>     String name = c.getName();
+<a name="229" href="#229">229</a>     assertEquals(<span class="jxr_string">"c000"</span>, name);
+<a name="230" href="#230">230</a> 
+<a name="231" href="#231">231</a>     <em class="jxr_comment">// get nonexisting value</em>
+<a name="232" href="#232">232</a>     q.setColumn(<span class="jxr_string">"column doesn't exist"</span>);
+<a name="233" href="#233">233</a>     r = q.execute();
+<a name="234" href="#234">234</a>     assertNotNull(r);
+<a name="235" href="#235">235</a>     c = r.get();
+<a name="236" href="#236">236</a>     assertNull(c);
+<a name="237" href="#237">237</a> 
+<a name="238" href="#238">238</a>     <em class="jxr_comment">// remove value</em>
+<a name="239" href="#239">239</a>     deleteColumns(cleanup);
+<a name="240" href="#240">240</a>   }
+<a name="241" href="#241">241</a> 
+<a name="242" href="#242">242</a>   @Test
+<a name="243" href="#243">243</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMultigetSliceQuery() {
+<a name="244" href="#244">244</a>     String cf = <span class="jxr_string">"Standard1"</span>;
+<a name="245" href="#245">245</a> 
+<a name="246" href="#246">246</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertColumns(cf, 4, <span class="jxr_string">"testMultigetSliceQuery"</span>, 3,
+<a name="247" href="#247">247</a>         <span class="jxr_string">"testMultigetSliceQueryColumn"</span>);
+<a name="248" href="#248">248</a> 
+<a name="249" href="#249">249</a>     <em class="jxr_comment">// get value</em>
+<a name="250" href="#250">250</a>     MultigetSliceQuery&lt;String, String, String&gt; q = createMultigetSliceQuery(ko, se, se, se);
+<a name="251" href="#251">251</a>     q.setColumnFamily(cf);
+<a name="252" href="#252">252</a>     q.setKeys(<span class="jxr_string">"testMultigetSliceQuery1"</span>, <span class="jxr_string">"testMultigetSliceQuery2"</span>);
+<a name="253" href="#253">253</a>     <em class="jxr_comment">// try with column name first</em>
+<a name="254" href="#254">254</a>     q.setColumnNames(<span class="jxr_string">"testMultigetSliceQueryColumn1"</span>, <span class="jxr_string">"testMultigetSliceQueryColumn2"</span>);
+<a name="255" href="#255">255</a>     QueryResult&lt;Rows&lt;String, String, String&gt;&gt; r = q.execute();
+<a name="256" href="#256">256</a>     assertNotNull(r);
+<a name="257" href="#257">257</a>     Rows&lt;String, String, String&gt; rows = r.get();
+<a name="258" href="#258">258</a>     assertNotNull(rows);
+<a name="259" href="#259">259</a>     assertEquals(2, rows.getCount());
+<a name="260" href="#260">260</a>     Row&lt;String, String, String&gt; row = rows.getByKey(<span class="jxr_string">"testMultigetSliceQuery1"</span>);
+<a name="261" href="#261">261</a>     assertNotNull(row);
+<a name="262" href="#262">262</a>     assertEquals(<span class="jxr_string">"testMultigetSliceQuery1"</span>, row.getKey());
+<a name="263" href="#263">263</a>     ColumnSlice&lt;String, String&gt; slice = row.getColumnSlice();
+<a name="264" href="#264">264</a>     assertNotNull(slice);
+<a name="265" href="#265">265</a>     <em class="jxr_comment">// Test slice.getColumnByName</em>
+<a name="266" href="#266">266</a>     assertEquals(<span class="jxr_string">"value11"</span>, slice.getColumnByName(<span class="jxr_string">"testMultigetSliceQueryColumn1"</span>).getValue());
+<a name="267" href="#267">267</a>     assertEquals(<span class="jxr_string">"value12"</span>, slice.getColumnByName(<span class="jxr_string">"testMultigetSliceQueryColumn2"</span>).getValue());
+<a name="268" href="#268">268</a>     assertNull(slice.getColumnByName(<span class="jxr_string">"testMultigetSliceQueryColumn3"</span>));
+<a name="269" href="#269">269</a>     <em class="jxr_comment">// Test slice.getColumns</em>
+<a name="270" href="#270">270</a>     List&lt;HColumn&lt;String, String&gt;&gt; columns = slice.getColumns();
+<a name="271" href="#271">271</a>     assertNotNull(columns);
+<a name="272" href="#272">272</a>     assertEquals(2, columns.size());
+<a name="273" href="#273">273</a> 
+<a name="274" href="#274">274</a>     <em class="jxr_comment">// now try with start/finish</em>
+<a name="275" href="#275">275</a>     q = createMultigetSliceQuery(ko, se, se, se);
+<a name="276" href="#276">276</a>     q.setColumnFamily(cf);
+<a name="277" href="#277">277</a>     q.setKeys(<span class="jxr_string">"testMultigetSliceQuery3"</span>);
+<a name="278" href="#278">278</a>     q.setRange(<span class="jxr_string">"testMultigetSliceQueryColumn1"</span>, <span class="jxr_string">"testMultigetSliceQueryColumn3"</span>, false, 100);
+<a name="279" href="#279">279</a>     r = q.execute();
+<a name="280" href="#280">280</a>     assertNotNull(r);
+<a name="281" href="#281">281</a>     rows = r.get();
+<a name="282" href="#282">282</a>     assertEquals(1, rows.getCount());
+<a name="283" href="#283">283</a>     <strong class="jxr_keyword">for</strong> (Row&lt;String, String, String&gt; row2 : rows) {
+<a name="284" href="#284">284</a>       assertNotNull(row2);
+<a name="285" href="#285">285</a>       slice = row2.getColumnSlice();
+<a name="286" href="#286">286</a>       assertNotNull(slice);
+<a name="287" href="#287">287</a>       <strong class="jxr_keyword">for</strong> (HColumn&lt;String, String&gt; column : slice.getColumns()) {
+<a name="288" href="#288">288</a>         <strong class="jxr_keyword">if</strong> (!column.getName().equals(<span class="jxr_string">"testMultigetSliceQueryColumn1"</span>)
+<a name="289" href="#289">289</a>             &amp;&amp; !column.getName().equals(<span class="jxr_string">"testMultigetSliceQueryColumn2"</span>)
+<a name="290" href="#290">290</a>             &amp;&amp; !column.getName().equals(<span class="jxr_string">"testMultigetSliceQueryColumn3"</span>)) {
+<a name="291" href="#291">291</a>           fail(<span class="jxr_string">"A columns with unexpected column name returned: "</span> + column.getName());
+<a name="292" href="#292">292</a>         }
+<a name="293" href="#293">293</a>       }
+<a name="294" href="#294">294</a>     }
+<a name="295" href="#295">295</a> 
+<a name="296" href="#296">296</a>     deleteColumns(cleanup);
+<a name="297" href="#297">297</a>   }
+<a name="298" href="#298">298</a> 
+<a name="299" href="#299">299</a>   @Test
+<a name="300" href="#300">300</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSliceQuery() {
+<a name="301" href="#301">301</a>     String cf = <span class="jxr_string">"Standard1"</span>;
+<a name="302" href="#302">302</a> 
+<a name="303" href="#303">303</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertColumns(cf, 1, <span class="jxr_string">"testSliceQuery"</span>, 4, <span class="jxr_string">"testSliceQuery"</span>);
+<a name="304" href="#304">304</a> 
+<a name="305" href="#305">305</a>     <em class="jxr_comment">// get value</em>
+<a name="306" href="#306">306</a>     SliceQuery&lt;String, String, String&gt; q = createSliceQuery(ko, se, se, se);
+<a name="307" href="#307">307</a>     q.setColumnFamily(cf);
+<a name="308" href="#308">308</a>     q.setKey(<span class="jxr_string">"testSliceQuery0"</span>);
+<a name="309" href="#309">309</a>     <em class="jxr_comment">// try with column name first</em>
+<a name="310" href="#310">310</a>     q.setColumnNames(<span class="jxr_string">"testSliceQuery1"</span>, <span class="jxr_string">"testSliceQuery2"</span>, <span class="jxr_string">"testSliceQuery3"</span>);
+<a name="311" href="#311">311</a>     QueryResult&lt;ColumnSlice&lt;String, String&gt;&gt; r = q.execute();
+<a name="312" href="#312">312</a>     assertNotNull(r);
+<a name="313" href="#313">313</a>     ColumnSlice&lt;String, String&gt; slice = r.get();
+<a name="314" href="#314">314</a>     assertNotNull(slice);
+<a name="315" href="#315">315</a>     assertEquals(3, slice.getColumns().size());
+<a name="316" href="#316">316</a>     <em class="jxr_comment">// Test slice.getColumnByName</em>
+<a name="317" href="#317">317</a>     assertEquals(<span class="jxr_string">"value01"</span>, slice.getColumnByName(<span class="jxr_string">"testSliceQuery1"</span>).getValue());
+<a name="318" href="#318">318</a>     assertEquals(<span class="jxr_string">"value02"</span>, slice.getColumnByName(<span class="jxr_string">"testSliceQuery2"</span>).getValue());
+<a name="319" href="#319">319</a>     assertEquals(<span class="jxr_string">"value03"</span>, slice.getColumnByName(<span class="jxr_string">"testSliceQuery3"</span>).getValue());
+<a name="320" href="#320">320</a>     <em class="jxr_comment">// Test slice.getColumns</em>
+<a name="321" href="#321">321</a>     List&lt;HColumn&lt;String, String&gt;&gt; columns = slice.getColumns();
+<a name="322" href="#322">322</a>     assertNotNull(columns);
+<a name="323" href="#323">323</a>     assertEquals(3, columns.size());
+<a name="324" href="#324">324</a> 
+<a name="325" href="#325">325</a>     <em class="jxr_comment">// now try with start/finish</em>
+<a name="326" href="#326">326</a>     q = createSliceQuery(ko, se, se, se);
+<a name="327" href="#327">327</a>     q.setColumnFamily(cf);
+<a name="328" href="#328">328</a>     q.setKey(<span class="jxr_string">"testSliceQuery0"</span>);
+<a name="329" href="#329">329</a>     <em class="jxr_comment">// try reversed this time</em>
+<a name="330" href="#330">330</a>     q.setRange(<span class="jxr_string">"testSliceQuery2"</span>, <span class="jxr_string">"testSliceQuery1"</span>, <strong class="jxr_keyword">true</strong>, 100);
+<a name="331" href="#331">331</a>     r = q.execute();
+<a name="332" href="#332">332</a>     assertNotNull(r);
+<a name="333" href="#333">333</a>     slice = r.get();
+<a name="334" href="#334">334</a>     assertNotNull(slice);
+<a name="335" href="#335">335</a>     assertEquals(2, slice.getColumns().size());
+<a name="336" href="#336">336</a>     <strong class="jxr_keyword">for</strong> (HColumn&lt;String, String&gt; column : slice.getColumns()) {
+<a name="337" href="#337">337</a>       <strong class="jxr_keyword">if</strong> (!column.getName().equals(<span class="jxr_string">"testSliceQuery1"</span>)
+<a name="338" href="#338">338</a>           &amp;&amp; !column.getName().equals(<span class="jxr_string">"testSliceQuery2"</span>)) {
+<a name="339" href="#339">339</a>         fail(<span class="jxr_string">"A columns with unexpected column name returned: "</span> + column.getName());
+<a name="340" href="#340">340</a>       }
+<a name="341" href="#341">341</a>     }
+<a name="342" href="#342">342</a> 
+<a name="343" href="#343">343</a>     deleteColumns(cleanup);
+<a name="344" href="#344">344</a>   }
+<a name="345" href="#345">345</a> 
+<a name="346" href="#346">346</a>   @Test
+<a name="347" href="#347">347</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSuperSliceQuery() {
+<a name="348" href="#348">348</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="349" href="#349">349</a> 
+<a name="350" href="#350">350</a>     Mutator&lt;String&gt; m = createMutator(ko, se);
+<a name="351" href="#351">351</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 1; j &lt;= 3; ++j) {
+<a name="352" href="#352">352</a>       @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a name="353" href="#353">353</a>       HSuperColumn&lt;String, String, String&gt; sc = createSuperColumn(<span class="jxr_string">"testSuperSliceQuery"</span> + j,
+<a name="354" href="#354">354</a>           Arrays.asList(createColumn(<span class="jxr_string">"name"</span>, <span class="jxr_string">"value"</span>, se, se)), se, se, se);
+<a name="355" href="#355">355</a>       m.addInsertion(<span class="jxr_string">"testSuperSliceQuery"</span>, cf, sc);
+<a name="356" href="#356">356</a>     }
+<a name="357" href="#357">357</a> 
+<a name="358" href="#358">358</a>     MutationResult mr = m.execute();
+<a name="359" href="#359">359</a>     assertTrue(<span class="jxr_string">"Time should be &gt; 0"</span>, mr.getExecutionTimeMicro() &gt; 0);
+<a name="360" href="#360">360</a>     log.debug(<span class="jxr_string">"insert execution time: {}"</span>, mr.getExecutionTimeMicro());
+<a name="361" href="#361">361</a> 
+<a name="362" href="#362">362</a>     <em class="jxr_comment">// get value</em>
+<a name="363" href="#363">363</a>     SuperSliceQuery&lt;String, String, String, String&gt; q = createSuperSliceQuery(ko, se, se, se, se);
+<a name="364" href="#364">364</a>     q.setColumnFamily(cf);
+<a name="365" href="#365">365</a>     q.setKey(<span class="jxr_string">"testSuperSliceQuery"</span>);
+<a name="366" href="#366">366</a>     <em class="jxr_comment">// try with column name first</em>
+<a name="367" href="#367">367</a>     q.setColumnNames(<span class="jxr_string">"testSuperSliceQuery1"</span>, <span class="jxr_string">"testSuperSliceQuery2"</span>, <span class="jxr_string">"testSuperSliceQuery3"</span>);
+<a name="368" href="#368">368</a>     QueryResult&lt;SuperSlice&lt;String, String, String&gt;&gt; r = q.execute();
+<a name="369" href="#369">369</a>     assertNotNull(r);
+<a name="370" href="#370">370</a>     SuperSlice&lt;String, String, String&gt; slice = r.get();
+<a name="371" href="#371">371</a>     assertNotNull(slice);
+<a name="372" href="#372">372</a>     assertEquals(3, slice.getSuperColumns().size());
+<a name="373" href="#373">373</a>     <em class="jxr_comment">// Test slice.getColumnByName</em>
+<a name="374" href="#374">374</a>     assertEquals(<span class="jxr_string">"value"</span>, slice.getColumnByName(<span class="jxr_string">"testSuperSliceQuery1"</span>).getColumns().get(0)
+<a name="375" href="#375">375</a>                                .getValue());
+<a name="376" href="#376">376</a> 
+<a name="377" href="#377">377</a>     <em class="jxr_comment">// now try with start/finish</em>
+<a name="378" href="#378">378</a>     q = createSuperSliceQuery(ko, se, se, se, se);
+<a name="379" href="#379">379</a>     q.setColumnFamily(cf);
+<a name="380" href="#380">380</a>     q.setKey(<span class="jxr_string">"testSuperSliceQuery"</span>);
+<a name="381" href="#381">381</a>     <em class="jxr_comment">// try reversed this time</em>
+<a name="382" href="#382">382</a>     q.setRange(<span class="jxr_string">"testSuperSliceQuery1"</span>, <span class="jxr_string">"testSuperSliceQuery2"</span>, false, 2);
+<a name="383" href="#383">383</a>     r = q.execute();
+<a name="384" href="#384">384</a>     assertNotNull(r);
+<a name="385" href="#385">385</a>     slice = r.get();
+<a name="386" href="#386">386</a>     assertNotNull(slice);
+<a name="387" href="#387">387</a>     <strong class="jxr_keyword">for</strong> (HSuperColumn&lt;String, String, String&gt; scolumn : slice.getSuperColumns()) {
+<a name="388" href="#388">388</a>       <strong class="jxr_keyword">if</strong> (!scolumn.getName().equals(<span class="jxr_string">"testSuperSliceQuery1"</span>)
+<a name="389" href="#389">389</a>           &amp;&amp; !scolumn.getName().equals(<span class="jxr_string">"testSuperSliceQuery2"</span>)) {
+<a name="390" href="#390">390</a>         fail(<span class="jxr_string">"A columns with unexpected column name returned: "</span> + scolumn.getName());
+<a name="391" href="#391">391</a>       }
+<a name="392" href="#392">392</a>     }
+<a name="393" href="#393">393</a> 
+<a name="394" href="#394">394</a>     <em class="jxr_comment">// Delete values</em>
+<a name="395" href="#395">395</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 1; j &lt;= 3; ++j) {
+<a name="396" href="#396">396</a>       m.addDeletion(<span class="jxr_string">"testSuperSliceQuery"</span>, cf, <span class="jxr_string">"testSuperSliceQuery"</span> + j, se);
+<a name="397" href="#397">397</a>     }
+<a name="398" href="#398">398</a>     mr = m.execute();
+<a name="399" href="#399">399</a> 
+<a name="400" href="#400">400</a>     <em class="jxr_comment">// Test after deletion</em>
+<a name="401" href="#401">401</a>     r = q.execute();
+<a name="402" href="#402">402</a>     assertNotNull(r);
+<a name="403" href="#403">403</a>     slice = r.get();
+<a name="404" href="#404">404</a>     assertNotNull(slice);
+<a name="405" href="#405">405</a>     assertTrue(slice.getSuperColumns().isEmpty());
+<a name="406" href="#406">406</a>   }
+<a name="407" href="#407">407</a> 
+<a name="408" href="#408">408</a>   <em class="jxr_javadoccomment">/**</em>
+<a name="409" href="#409">409</a> <em class="jxr_javadoccomment">   * Tests the SubSliceQuery, a query on columns within a supercolumn</em>
+<a name="410" href="#410">410</a> <em class="jxr_javadoccomment">   */</em>
+<a name="411" href="#411">411</a>   @Test
+<a name="412" href="#412">412</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSubSliceQuery() {
+<a name="413" href="#413">413</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="414" href="#414">414</a> 
+<a name="415" href="#415">415</a>     <em class="jxr_comment">// insert</em>
+<a name="416" href="#416">416</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertSuperColumns(cf, 1, <span class="jxr_string">"testSliceQueryOnSubcolumns"</span>, 1,
+<a name="417" href="#417">417</a>         <span class="jxr_string">"testSliceQueryOnSubcolumns_column"</span>);
+<a name="418" href="#418">418</a> 
+<a name="419" href="#419">419</a>     <em class="jxr_comment">// get value</em>
+<a name="420" href="#420">420</a>     SubSliceQuery&lt;String, String, String, String&gt; q = createSubSliceQuery(ko, se, se, se, se);
+<a name="421" href="#421">421</a>     q.setColumnFamily(cf);
+<a name="422" href="#422">422</a>     q.setSuperColumn(<span class="jxr_string">"testSliceQueryOnSubcolumns_column0"</span>);
+<a name="423" href="#423">423</a>     q.setKey(<span class="jxr_string">"testSliceQueryOnSubcolumns0"</span>);
+<a name="424" href="#424">424</a>     <em class="jxr_comment">// try with column name first</em>
+<a name="425" href="#425">425</a>     q.setColumnNames(<span class="jxr_string">"c000"</span>, <span class="jxr_string">"c110"</span>, <span class="jxr_string">"c_doesn't_exist"</span>);
+<a name="426" href="#426">426</a>     QueryResult&lt;ColumnSlice&lt;String, String&gt;&gt; r = q.execute();
+<a name="427" href="#427">427</a>     assertNotNull(r);
+<a name="428" href="#428">428</a>     ColumnSlice&lt;String, String&gt; slice = r.get();
+<a name="429" href="#429">429</a>     assertNotNull(slice);
+<a name="430" href="#430">430</a>     assertEquals(2, slice.getColumns().size());
+<a name="431" href="#431">431</a>     <em class="jxr_comment">// Test slice.getColumnByName</em>
+<a name="432" href="#432">432</a>     assertEquals(<span class="jxr_string">"v000"</span>, slice.getColumnByName(<span class="jxr_string">"c000"</span>).getValue());
+<a name="433" href="#433">433</a> 
+<a name="434" href="#434">434</a>     <em class="jxr_comment">// now try with start/finish</em>
+<a name="435" href="#435">435</a>     q = createSubSliceQuery(ko, se, se, se, se);
+<a name="436" href="#436">436</a>     q.setColumnFamily(cf);
+<a name="437" href="#437">437</a>     q.setKey(<span class="jxr_string">"testSliceQueryOnSubcolumns0"</span>);
+<a name="438" href="#438">438</a>     q.setSuperColumn(<span class="jxr_string">"testSliceQueryOnSubcolumns_column0"</span>);
+<a name="439" href="#439">439</a>     <em class="jxr_comment">// try reversed this time</em>
+<a name="440" href="#440">440</a>     q.setRange(<span class="jxr_string">"c000"</span>, <span class="jxr_string">"c110"</span>, false, 2);
+<a name="441" href="#441">441</a>     r = q.execute();
+<a name="442" href="#442">442</a>     assertNotNull(r);
+<a name="443" href="#443">443</a>     slice = r.get();
+<a name="444" href="#444">444</a>     assertNotNull(slice);
+<a name="445" href="#445">445</a>     <strong class="jxr_keyword">for</strong> (HColumn&lt;String, String&gt; column : slice.getColumns()) {
+<a name="446" href="#446">446</a>       <strong class="jxr_keyword">if</strong> (!column.getName().equals(<span class="jxr_string">"c000"</span>) &amp;&amp; !column.getName().equals(<span class="jxr_string">"c110"</span>)) {
+<a name="447" href="#447">447</a>         fail(<span class="jxr_string">"A columns with unexpected column name returned: "</span> + column.getName());
+<a name="448" href="#448">448</a>       }
+<a name="449" href="#449">449</a>     }
+<a name="450" href="#450">450</a> 
+<a name="451" href="#451">451</a>     <em class="jxr_comment">// Delete values</em>
+<a name="452" href="#452">452</a>     deleteColumns(cleanup);
+<a name="453" href="#453">453</a> 
+<a name="454" href="#454">454</a>     <em class="jxr_comment">// Test after deletion</em>
+<a name="455" href="#455">455</a>     r = q.execute();
+<a name="456" href="#456">456</a>     assertNotNull(r);
+<a name="457" href="#457">457</a>     slice = r.get();
+<a name="458" href="#458">458</a>     assertNotNull(slice);
+<a name="459" href="#459">459</a>     assertTrue(slice.getColumns().isEmpty());
+<a name="460" href="#460">460</a>   }
+<a name="461" href="#461">461</a> 
+<a name="462" href="#462">462</a>   @Test
+<a name="463" href="#463">463</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMultigetSuperSliceQuery() {
+<a name="464" href="#464">464</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="465" href="#465">465</a> 
+<a name="466" href="#466">466</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertSuperColumns(cf, 4, <span class="jxr_string">"testSuperMultigetSliceQueryKey"</span>, 3,
+<a name="467" href="#467">467</a>         <span class="jxr_string">"testSuperMultigetSliceQuery"</span>);
+<a name="468" href="#468">468</a> 
+<a name="469" href="#469">469</a>     <em class="jxr_comment">// get value</em>
+<a name="470" href="#470">470</a>     MultigetSuperSliceQuery&lt;String, String, String, String&gt; q = createMultigetSuperSliceQuery(ko, se, se, se,
+<a name="471" href="#471">471</a>         se);
+<a name="472" href="#472">472</a>     q.setColumnFamily(cf);
+<a name="473" href="#473">473</a>     q.setKeys(<span class="jxr_string">"testSuperMultigetSliceQueryKey0"</span>, <span class="jxr_string">"testSuperMultigetSliceQueryKey3"</span>);
+<a name="474" href="#474">474</a>     <em class="jxr_comment">// try with column name first</em>
+<a name="475" href="#475">475</a>     q.setColumnNames(<span class="jxr_string">"testSuperMultigetSliceQuery1"</span>, <span class="jxr_string">"testSuperMultigetSliceQuery2"</span>);
+<a name="476" href="#476">476</a>     QueryResult&lt;SuperRows&lt;String, String, String, String&gt;&gt; r = q.execute();
+<a name="477" href="#477">477</a>     assertNotNull(r);
+<a name="478" href="#478">478</a>     SuperRows&lt;String, String, String, String&gt; rows = r.get();
+<a name="479" href="#479">479</a>     assertNotNull(rows);
+<a name="480" href="#480">480</a>     assertEquals(2, rows.getCount());
+<a name="481" href="#481">481</a>     SuperRow&lt;String, String, String, String&gt; row = rows.getByKey(<span class="jxr_string">"testSuperMultigetSliceQueryKey0"</span>);
+<a name="482" href="#482">482</a>     assertNotNull(row);
+<a name="483" href="#483">483</a>     assertEquals(<span class="jxr_string">"testSuperMultigetSliceQueryKey0"</span>, row.getKey());
+<a name="484" href="#484">484</a>     SuperSlice&lt;String, String, String&gt; slice = row.getSuperSlice();
+<a name="485" href="#485">485</a>     assertNotNull(slice);
+<a name="486" href="#486">486</a>     <em class="jxr_comment">// Test slice.getColumnByName</em>
+<a name="487" href="#487">487</a>     assertEquals(<span class="jxr_string">"v001"</span>, slice.getColumnByName(<span class="jxr_string">"testSuperMultigetSliceQuery1"</span>).getColumns().get(0)
+<a name="488" href="#488">488</a>                               .getValue());
+<a name="489" href="#489">489</a>     assertNull(slice.getColumnByName(<span class="jxr_string">"testSuperMultigetSliceQuery3"</span>));
+<a name="490" href="#490">490</a> 
+<a name="491" href="#491">491</a>     deleteColumns(cleanup);
+<a name="492" href="#492">492</a>   }
+<a name="493" href="#493">493</a> 
+<a name="494" href="#494">494</a>   @Test
+<a name="495" href="#495">495</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMultigetSubSliceQuery() {
+<a name="496" href="#496">496</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="497" href="#497">497</a> 
+<a name="498" href="#498">498</a>     <em class="jxr_comment">// insert</em>
+<a name="499" href="#499">499</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertSuperColumns(cf, 3, <span class="jxr_string">"testMultigetSubSliceQuery"</span>, 1,
+<a name="500" href="#500">500</a>         <span class="jxr_string">"testMultigetSubSliceQuery"</span>);
+<a name="501" href="#501">501</a> 
+<a name="502" href="#502">502</a>     <em class="jxr_comment">// get value</em>
+<a name="503" href="#503">503</a>     MultigetSubSliceQuery&lt;String, String, String, String&gt; q = createMultigetSubSliceQuery(ko, se, se, se, se);
+<a name="504" href="#504">504</a>     q.setColumnFamily(cf);
+<a name="505" href="#505">505</a>     q.setSuperColumn(<span class="jxr_string">"testMultigetSubSliceQuery0"</span>);
+<a name="506" href="#506">506</a>     q.setKeys(<span class="jxr_string">"testMultigetSubSliceQuery0"</span>, <span class="jxr_string">"testMultigetSubSliceQuery2"</span>);
+<a name="507" href="#507">507</a>     <em class="jxr_comment">// try with column name first</em>
+<a name="508" href="#508">508</a>     q.setColumnNames(<span class="jxr_string">"c000"</span>, <span class="jxr_string">"c110"</span>);
+<a name="509" href="#509">509</a>     QueryResult&lt;Rows&lt;String, String, String&gt;&gt; r = q.execute();
+<a name="510" href="#510">510</a>     assertNotNull(r);
+<a name="511" href="#511">511</a>     Rows&lt;String, String, String&gt; rows = r.get();
+<a name="512" href="#512">512</a>     assertNotNull(rows);
+<a name="513" href="#513">513</a>     assertEquals(2, rows.getCount());
+<a name="514" href="#514">514</a>     Row&lt;String, String, String&gt; row = rows.getByKey(<span class="jxr_string">"testMultigetSubSliceQuery0"</span>);
+<a name="515" href="#515">515</a>     assertNotNull(row);
+<a name="516" href="#516">516</a>     assertEquals(<span class="jxr_string">"testMultigetSubSliceQuery0"</span>, row.getKey());
+<a name="517" href="#517">517</a>     ColumnSlice&lt;String, String&gt; slice = row.getColumnSlice();
+<a name="518" href="#518">518</a>     assertNotNull(slice);
+<a name="519" href="#519">519</a>     <em class="jxr_comment">// Test slice.getColumnByName</em>
+<a name="520" href="#520">520</a>     assertEquals(<span class="jxr_string">"v000"</span>, slice.getColumnByName(<span class="jxr_string">"c000"</span>).getValue());
+<a name="521" href="#521">521</a>     assertEquals(<span class="jxr_string">"v100"</span>, slice.getColumnByName(<span class="jxr_string">"c110"</span>).getValue());
+<a name="522" href="#522">522</a>     <em class="jxr_comment">// Test slice.getColumns</em>
+<a name="523" href="#523">523</a>     List&lt;HColumn&lt;String, String&gt;&gt; columns = slice.getColumns();
+<a name="524" href="#524">524</a>     assertNotNull(columns);
+<a name="525" href="#525">525</a>     assertEquals(2, columns.size());
+<a name="526" href="#526">526</a> 
+<a name="527" href="#527">527</a>     <em class="jxr_comment">// now try with start/finish</em>
+<a name="528" href="#528">528</a>     q = createMultigetSubSliceQuery(ko, se, se, se, se);
+<a name="529" href="#529">529</a>     q.setColumnFamily(cf);
+<a name="530" href="#530">530</a>     q.setKeys(<span class="jxr_string">"testMultigetSubSliceQuery0"</span>);
+<a name="531" href="#531">531</a>     q.setSuperColumn(<span class="jxr_string">"testMultigetSubSliceQuery0"</span>);
+<a name="532" href="#532">532</a>     <em class="jxr_comment">// try reversed this time</em>
+<a name="533" href="#533">533</a>     q.setRange(<span class="jxr_string">"c000"</span>, <span class="jxr_string">"c110"</span>, false, 2);
+<a name="534" href="#534">534</a>     r = q.execute();
+<a name="535" href="#535">535</a>     assertNotNull(r);
+<a name="536" href="#536">536</a>     rows = r.get();
+<a name="537" href="#537">537</a>     assertEquals(1, rows.getCount());
+<a name="538" href="#538">538</a>     <strong class="jxr_keyword">for</strong> (Row&lt;String, String, String&gt; row2 : rows) {
+<a name="539" href="#539">539</a>       assertNotNull(row2);
+<a name="540" href="#540">540</a>       slice = row2.getColumnSlice();
+<a name="541" href="#541">541</a>       assertNotNull(slice);
+<a name="542" href="#542">542</a>       assertEquals(2, slice.getColumns().size());
+<a name="543" href="#543">543</a>       <strong class="jxr_keyword">for</strong> (HColumn&lt;String, String&gt; column : slice.getColumns()) {
+<a name="544" href="#544">544</a>         <strong class="jxr_keyword">if</strong> (!column.getName().equals(<span class="jxr_string">"c000"</span>) &amp;&amp; !column.getName().equals(<span class="jxr_string">"c110"</span>)) {
+<a name="545" href="#545">545</a>           fail(<span class="jxr_string">"A columns with unexpected column name returned: "</span> + column.getName());
+<a name="546" href="#546">546</a>         }
+<a name="547" href="#547">547</a>       }
+<a name="548" href="#548">548</a>     }
+<a name="549" href="#549">549</a> 
+<a name="550" href="#550">550</a>     <em class="jxr_comment">// Delete values</em>
+<a name="551" href="#551">551</a>     deleteColumns(cleanup);
+<a name="552" href="#552">552</a>   }
+<a name="553" href="#553">553</a> 
+<a name="554" href="#554">554</a>   @Test
+<a name="555" href="#555">555</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testRangeSlicesQuery() {
+<a name="556" href="#556">556</a>     String cf = <span class="jxr_string">"Standard1"</span>;
+<a name="557" href="#557">557</a> 
+<a name="558" href="#558">558</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertColumns(cf, 4, <span class="jxr_string">"testRangeSlicesQuery"</span>, 3,
+<a name="559" href="#559">559</a>         <span class="jxr_string">"testRangeSlicesQueryColumn"</span>);
+<a name="560" href="#560">560</a> 
+<a name="561" href="#561">561</a>     <em class="jxr_comment">// get value</em>
+<a name="562" href="#562">562</a>     RangeSlicesQuery&lt;String, String, String&gt; q = createRangeSlicesQuery(ko, se, se, se);
+<a name="563" href="#563">563</a>     q.setColumnFamily(cf);
+<a name="564" href="#564">564</a>     q.setKeys(<span class="jxr_string">"testRangeSlicesQuery1"</span>, <span class="jxr_string">"testRangeSlicesQuery3"</span>);
+<a name="565" href="#565">565</a>     <em class="jxr_comment">// try with column name first</em>
+<a name="566" href="#566">566</a>     q.setColumnNames(<span class="jxr_string">"testRangeSlicesQueryColumn1"</span>, <span class="jxr_string">"testRangeSlicesQueryColumn2"</span>);
+<a name="567" href="#567">567</a>     QueryResult&lt;OrderedRows&lt;String, String, String&gt;&gt; r = q.execute();
+<a name="568" href="#568">568</a> 
+<a name="569" href="#569">569</a>     assertNotNull(r);
+<a name="570" href="#570">570</a>     OrderedRows&lt;String, String, String&gt; rows = r.get();
+<a name="571" href="#571">571</a>     assertNotNull(rows);
+<a name="572" href="#572">572</a> 
+<a name="573" href="#573">573</a>     assertEquals(3, rows.getCount());
+<a name="574" href="#574">574</a>     Row&lt;String, String, String&gt; row = rows.getList().get(0);
+<a name="575" href="#575">575</a>     assertNotNull(row);
+<a name="576" href="#576">576</a>     assertEquals(<span class="jxr_string">"testRangeSlicesQuery1"</span>, row.getKey());
+<a name="577" href="#577">577</a>     ColumnSlice&lt;String, String&gt; slice = row.getColumnSlice();
+<a name="578" href="#578">578</a>     assertNotNull(slice);
+<a name="579" href="#579">579</a>     <em class="jxr_comment">// Test slice.getColumnByName</em>
+<a name="580" href="#580">580</a>     assertEquals(<span class="jxr_string">"value11"</span>, slice.getColumnByName(<span class="jxr_string">"testRangeSlicesQueryColumn1"</span>).getValue());
+<a name="581" href="#581">581</a>     assertEquals(<span class="jxr_string">"value12"</span>, slice.getColumnByName(<span class="jxr_string">"testRangeSlicesQueryColumn2"</span>).getValue());
+<a name="582" href="#582">582</a>     assertNull(slice.getColumnByName(<span class="jxr_string">"testRangeSlicesQueryColumn3"</span>));
+<a name="583" href="#583">583</a>     <em class="jxr_comment">// Test slice.getColumns</em>
+<a name="584" href="#584">584</a>     List&lt;HColumn&lt;String, String&gt;&gt; columns = slice.getColumns();
+<a name="585" href="#585">585</a>     assertNotNull(columns);
+<a name="586" href="#586">586</a>     assertEquals(2, columns.size());
+<a name="587" href="#587">587</a> 
+<a name="588" href="#588">588</a>     <em class="jxr_comment">// now try with setKeys in combination with setRange</em>
+<a name="589" href="#589">589</a>     q.setKeys(<span class="jxr_string">"testRangeSlicesQuery1"</span>, <span class="jxr_string">"testRangeSlicesQuery5"</span>);
+<a name="590" href="#590">590</a>     q.setRange(<span class="jxr_string">"testRangeSlicesQueryColumn1"</span>, <span class="jxr_string">"testRangeSlicesQueryColumn3"</span>, false, 100);
+<a name="591" href="#591">591</a>     r = q.execute();
+<a name="592" href="#592">592</a>     assertNotNull(r);
+<a name="593" href="#593">593</a>     rows = r.get();
+<a name="594" href="#594">594</a>     assertEquals(3, rows.getCount());
+<a name="595" href="#595">595</a>     <strong class="jxr_keyword">for</strong> (Row&lt;String, String, String&gt; row2 : rows) {
+<a name="596" href="#596">596</a>       assertNotNull(row2);
+<a name="597" href="#597">597</a>       slice = row2.getColumnSlice();
+<a name="598" href="#598">598</a>       assertNotNull(slice);
+<a name="599" href="#599">599</a>       assertEquals(2, slice.getColumns().size());
+<a name="600" href="#600">600</a>       <strong class="jxr_keyword">for</strong> (HColumn&lt;String, String&gt; column : slice.getColumns()) {
+<a name="601" href="#601">601</a>         <strong class="jxr_keyword">if</strong> (!column.getName().equals(<span class="jxr_string">"testRangeSlicesQueryColumn1"</span>)
+<a name="602" href="#602">602</a>             &amp;&amp; !column.getName().equals(<span class="jxr_string">"testRangeSlicesQueryColumn2"</span>)) {
+<a name="603" href="#603">603</a>           fail(<span class="jxr_string">"A columns with unexpected column name returned: "</span> + column.getName());
+<a name="604" href="#604">604</a>         }
+<a name="605" href="#605">605</a>       }
+<a name="606" href="#606">606</a> 
+<a name="607" href="#607">607</a>     }
+<a name="608" href="#608">608</a> 
+<a name="609" href="#609">609</a>     <em class="jxr_comment">// Delete values</em>
+<a name="610" href="#610">610</a>     deleteColumns(cleanup);
+<a name="611" href="#611">611</a>   }
+<a name="612" href="#612">612</a> 
+<a name="613" href="#613">613</a>   @Test
+<a name="614" href="#614">614</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testRangeSuperSlicesQuery() {
+<a name="615" href="#615">615</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="616" href="#616">616</a> 
+<a name="617" href="#617">617</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertSuperColumns(cf, 4, <span class="jxr_string">"testRangeSuperSlicesQuery"</span>, 3,
+<a name="618" href="#618">618</a>         <span class="jxr_string">"testRangeSuperSlicesQuery"</span>);
+<a name="619" href="#619">619</a> 
+<a name="620" href="#620">620</a>     <em class="jxr_comment">// get value</em>
+<a name="621" href="#621">621</a>     RangeSuperSlicesQuery&lt;String, String,String, String&gt; q = createRangeSuperSlicesQuery(ko, se, se, se, se);
+<a name="622" href="#622">622</a>     q.setColumnFamily(cf);
+<a name="623" href="#623">623</a>     q.setKeys(<span class="jxr_string">"testRangeSuperSlicesQuery2"</span>, <span class="jxr_string">"testRangeSuperSlicesQuery3"</span>);
+<a name="624" href="#624">624</a>     <em class="jxr_comment">// try with column name first</em>
+<a name="625" href="#625">625</a>     q.setColumnNames(<span class="jxr_string">"testRangeSuperSlicesQuery1"</span>, <span class="jxr_string">"testRangeSuperSlicesQuery2"</span>);
+<a name="626" href="#626">626</a>     QueryResult&lt;OrderedSuperRows&lt;String, String, String, String&gt;&gt; r = q.execute();
+<a name="627" href="#627">627</a>     assertNotNull(r);
+<a name="628" href="#628">628</a>     OrderedSuperRows&lt;String, String, String, String&gt; rows = r.get();
+<a name="629" href="#629">629</a>     assertNotNull(rows);
+<a name="630" href="#630">630</a>     assertEquals(2, rows.getCount());
+<a name="631" href="#631">631</a>     SuperRow&lt;String, String, String, String&gt; row = rows.getList().get(0);
+<a name="632" href="#632">632</a>     assertNotNull(row);
+<a name="633" href="#633">633</a>     assertEquals(<span class="jxr_string">"testRangeSuperSlicesQuery2"</span>, row.getKey());
+<a name="634" href="#634">634</a>     SuperSlice&lt;String, String, String&gt; slice = row.getSuperSlice();
+<a name="635" href="#635">635</a>     assertNotNull(slice);
+<a name="636" href="#636">636</a>     <em class="jxr_comment">// Test slice.getColumnByName</em>
+<a name="637" href="#637">637</a>     assertEquals(<span class="jxr_string">"v021"</span>, slice.getColumnByName(<span class="jxr_string">"testRangeSuperSlicesQuery1"</span>).get(0).getValue());
+<a name="638" href="#638">638</a>     assertEquals(<span class="jxr_string">"v022"</span>, slice.getColumnByName(<span class="jxr_string">"testRangeSuperSlicesQuery2"</span>).get(0).getValue());
+<a name="639" href="#639">639</a>     assertNull(slice.getColumnByName(<span class="jxr_string">"testRangeSuperSlicesQuery3"</span>));
+<a name="640" href="#640">640</a> 
+<a name="641" href="#641">641</a>     <em class="jxr_comment">// now try with setKeys in combination with setRange</em>
+<a name="642" href="#642">642</a>     q.setKeys(<span class="jxr_string">"testRangeSuperSlicesQuery0"</span>, <span class="jxr_string">"testRangeSuperSlicesQuery5"</span>);
+<a name="643" href="#643">643</a>     q.setRange(<span class="jxr_string">"testRangeSuperSlicesQuery1"</span>, <span class="jxr_string">"testRangeSuperSlicesQuery3"</span>, false, 100);
+<a name="644" href="#644">644</a>     r = q.execute();
+<a name="645" href="#645">645</a>     assertNotNull(r);
+<a name="646" href="#646">646</a>     rows = r.get();
+<a name="647" href="#647">647</a>     assertEquals(4, rows.getCount());
+<a name="648" href="#648">648</a>     <strong class="jxr_keyword">for</strong> (SuperRow&lt;String, String, String, String&gt; row2 : rows) {
+<a name="649" href="#649">649</a>       assertNotNull(row2);
+<a name="650" href="#650">650</a>       slice = row2.getSuperSlice();
+<a name="651" href="#651">651</a>       assertNotNull(slice);
+<a name="652" href="#652">652</a>       assertEquals(2, slice.getSuperColumns().size());
+<a name="653" href="#653">653</a>       <strong class="jxr_keyword">for</strong> (HSuperColumn&lt;String, String, String&gt; column : slice.getSuperColumns()) {
+<a name="654" href="#654">654</a>         <strong class="jxr_keyword">if</strong> (!column.getName().equals(<span class="jxr_string">"testRangeSuperSlicesQuery1"</span>)
+<a name="655" href="#655">655</a>             &amp;&amp; !column.getName().equals(<span class="jxr_string">"testRangeSuperSlicesQuery2"</span>)) {
+<a name="656" href="#656">656</a>           fail(<span class="jxr_string">"A columns with unexpected column name returned: "</span> + column.getName());
+<a name="657" href="#657">657</a>         }
+<a name="658" href="#658">658</a>       }
+<a name="659" href="#659">659</a>     }
+<a name="660" href="#660">660</a> 
+<a name="661" href="#661">661</a>     <em class="jxr_comment">// Delete values</em>
+<a name="662" href="#662">662</a>     deleteColumns(cleanup);
+<a name="663" href="#663">663</a>   }
+<a name="664" href="#664">664</a> 
+<a name="665" href="#665">665</a>   @Test
+<a name="666" href="#666">666</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testRangeSubSlicesQuery() {
+<a name="667" href="#667">667</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="668" href="#668">668</a> 
+<a name="669" href="#669">669</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertSuperColumns(cf, 4, <span class="jxr_string">"testRangeSubSlicesQuery"</span>, 3,
+<a name="670" href="#670">670</a>         <span class="jxr_string">"testRangeSubSlicesQuery"</span>);
+<a name="671" href="#671">671</a> 
+<a name="672" href="#672">672</a>     <em class="jxr_comment">// get value</em>
+<a name="673" href="#673">673</a>     RangeSubSlicesQuery&lt;String, String,String, String&gt; q = createRangeSubSlicesQuery(ko, se, se, se, se);
+<a name="674" href="#674">674</a>     q.setColumnFamily(cf);
+<a name="675" href="#675">675</a>     q.setKeys(<span class="jxr_string">"testRangeSubSlicesQuery2"</span>, <span class="jxr_string">"testRangeSubSlicesQuery3"</span>);
+<a name="676" href="#676">676</a>     <em class="jxr_comment">// try with column name first</em>
+<a name="677" href="#677">677</a>     q.setSuperColumn(<span class="jxr_string">"testRangeSubSlicesQuery1"</span>);
+<a name="678" href="#678">678</a>     q.setColumnNames(<span class="jxr_string">"c021"</span>, <span class="jxr_string">"c111"</span>);
+<a name="679" href="#679">679</a>     QueryResult&lt;OrderedRows&lt;String, String, String&gt;&gt; r = q.execute();
+<a name="680" href="#680">680</a>     assertNotNull(r);
+<a name="681" href="#681">681</a>     OrderedRows&lt;String, String, String&gt; rows = r.get();
+<a name="682" href="#682">682</a>     assertNotNull(rows);
+<a name="683" href="#683">683</a>     assertEquals(2, rows.getCount());
+<a name="684" href="#684">684</a>     Row&lt;String, String, String&gt; row = rows.getList().get(0);
+<a name="685" href="#685">685</a>     assertNotNull(row);
+<a name="686" href="#686">686</a>     assertEquals(<span class="jxr_string">"testRangeSubSlicesQuery2"</span>, row.getKey());
+<a name="687" href="#687">687</a>     ColumnSlice&lt;String, String&gt; slice = row.getColumnSlice();
+<a name="688" href="#688">688</a>     assertNotNull(slice);
+<a name="689" href="#689">689</a>     <em class="jxr_comment">// Test slice.getColumnByName</em>
+<a name="690" href="#690">690</a>     assertEquals(<span class="jxr_string">"v021"</span>, slice.getColumnByName(<span class="jxr_string">"c021"</span>).getValue());
+<a name="691" href="#691">691</a>     assertEquals(<span class="jxr_string">"v121"</span>, slice.getColumnByName(<span class="jxr_string">"c111"</span>).getValue());
+<a name="692" href="#692">692</a>     assertNull(slice.getColumnByName(<span class="jxr_string">"c033"</span>));
+<a name="693" href="#693">693</a> 
+<a name="694" href="#694">694</a>     <em class="jxr_comment">// Delete values</em>
+<a name="695" href="#695">695</a>     deleteColumns(cleanup);
+<a name="696" href="#696">696</a>   }
+<a name="697" href="#697">697</a> 
+<a name="698" href="#698">698</a>   @Test
+<a name="699" href="#699">699</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testCountQuery() {
+<a name="700" href="#700">700</a>     String cf = <span class="jxr_string">"Standard1"</span>;
+<a name="701" href="#701">701</a> 
+<a name="702" href="#702">702</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertColumns(cf, 1, <span class="jxr_string">"testCountQuery"</span>, 10,
+<a name="703" href="#703">703</a>         <span class="jxr_string">"testCountQueryColumn"</span>);
+<a name="704" href="#704">704</a>     CountQuery&lt;String, String&gt; cq = createCountQuery(ko, se, se);
+<a name="705" href="#705">705</a>     cq.setColumnFamily(cf).setKey(<span class="jxr_string">"testCountQuery0"</span>);
+<a name="706" href="#706">706</a>     cq.setRange(<span class="jxr_string">"testCountQueryColumn"</span>, <span class="jxr_string">"testCountQueryColumn999"</span>, 100);
+<a name="707" href="#707">707</a>     QueryResult&lt;Integer&gt; r = cq.execute();
+<a name="708" href="#708">708</a>     assertNotNull(r);
+<a name="709" href="#709">709</a>     assertEquals(Integer.valueOf(10), r.get());
+<a name="710" href="#710">710</a> 
+<a name="711" href="#711">711</a>     <em class="jxr_comment">// Delete values</em>
+<a name="712" href="#712">712</a>     deleteColumns(cleanup);
+<a name="713" href="#713">713</a> 
+<a name="714" href="#714">714</a>     <em class="jxr_comment">// Try a non existing row, make sure it gets 0 (not exceptions)</em>
+<a name="715" href="#715">715</a>     cq = createCountQuery(ko, se, se);
+<a name="716" href="#716">716</a>     cq.setColumnFamily(cf).setKey(<span class="jxr_string">"testCountQuery_nonexisting"</span>);
+<a name="717" href="#717">717</a>     cq.setRange(<span class="jxr_string">"testCountQueryColumn"</span>, <span class="jxr_string">"testCountQueryColumn999"</span>, 100);
+<a name="718" href="#718">718</a>     r = cq.execute();
+<a name="719" href="#719">719</a>     assertNotNull(r);
+<a name="720" href="#720">720</a>     assertEquals(Integer.valueOf(0), r.get());
+<a name="721" href="#721">721</a> }
+<a name="722" href="#722">722</a> 
+<a name="723" href="#723">723</a> 
+<a name="724" href="#724">724</a>   @Test
+<a name="725" href="#725">725</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSuperCountQuery() {
+<a name="726" href="#726">726</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="727" href="#727">727</a> 
+<a name="728" href="#728">728</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertSuperColumns(cf, 1, <span class="jxr_string">"testSuperCountQuery"</span>, 11,
+<a name="729" href="#729">729</a>         <span class="jxr_string">"testSuperCountQueryColumn"</span>);
+<a name="730" href="#730">730</a>     SuperCountQuery&lt;String, String&gt; cq = createSuperCountQuery(ko, se, se);
+<a name="731" href="#731">731</a>     cq.setColumnFamily(cf).setKey(<span class="jxr_string">"testSuperCountQuery0"</span>);
+<a name="732" href="#732">732</a>     cq.setRange(<span class="jxr_string">"testSuperCountQueryColumn"</span>, <span class="jxr_string">"testSuperCountQueryColumn999"</span>, 100);
+<a name="733" href="#733">733</a>     QueryResult&lt;Integer&gt; r = cq.execute();
+<a name="734" href="#734">734</a>     assertNotNull(r);
+<a name="735" href="#735">735</a>     assertEquals(Integer.valueOf(11), r.get());
+<a name="736" href="#736">736</a> 
+<a name="737" href="#737">737</a>     <em class="jxr_comment">// Delete values</em>
+<a name="738" href="#738">738</a>     deleteColumns(cleanup);
+<a name="739" href="#739">739</a>   }
+<a name="740" href="#740">740</a> 
+<a name="741" href="#741">741</a>   @Test
+<a name="742" href="#742">742</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSubCountQuery() {
+<a name="743" href="#743">743</a>     String cf = <span class="jxr_string">"Super1"</span>;
+<a name="744" href="#744">744</a> 
+<a name="745" href="#745">745</a>     <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup = insertSuperColumns(cf, 1, <span class="jxr_string">"testSubCountQuery"</span>, 1,
+<a name="746" href="#746">746</a>         <span class="jxr_string">"testSubCountQueryColumn"</span>);
+<a name="747" href="#747">747</a>     SubCountQuery&lt;String, String, String&gt; cq = createSubCountQuery(ko, se, se, se);
+<a name="748" href="#748">748</a>     cq.setRange(<span class="jxr_string">"c0"</span>, <span class="jxr_string">"c3"</span>, 100);
+<a name="749" href="#749">749</a>     QueryResult&lt;Integer&gt; r = cq.setColumnFamily(cf).setKey(<span class="jxr_string">"testSubCountQuery0"</span>).
+<a name="750" href="#750">750</a>         setSuperColumn(<span class="jxr_string">"testSubCountQueryColumn0"</span>).execute();
+<a name="751" href="#751">751</a>     assertNotNull(r);
+<a name="752" href="#752">752</a>     assertEquals(Integer.valueOf(2), r.get());
+<a name="753" href="#753">753</a> 
+<a name="754" href="#754">754</a>     <em class="jxr_comment">// Delete values</em>
+<a name="755" href="#755">755</a>     deleteColumns(cleanup);
+<a name="756" href="#756">756</a>   }
+<a name="757" href="#757">757</a> 
+<a name="758" href="#758">758</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> deleteColumns(<a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> cleanup) {
+<a name="759" href="#759">759</a>     Mutator&lt;String&gt; m = createMutator(ko, se);
+<a name="760" href="#760">760</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; cleanup.rowCount; ++i) {
+<a name="761" href="#761">761</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; cleanup.columnCount; ++j) {
+<a name="762" href="#762">762</a>         m.addDeletion(cleanup.rowPrefix + i, cleanup.cf, cleanup.columnsPrefix + j, se);
+<a name="763" href="#763">763</a>       }
+<a name="764" href="#764">764</a>     }
+<a name="765" href="#765">765</a>     m.execute();
+<a name="766" href="#766">766</a>   }
+<a name="767" href="#767">767</a> 
+<a name="768" href="#768">768</a>   <strong class="jxr_keyword">private</strong> <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> insertSuperColumns(String cf, <strong class="jxr_keyword">int</strong> rowCount, String rowPrefix,
+<a name="769" href="#769">769</a>       <strong class="jxr_keyword">int</strong> scCount, String scPrefix) {
+<a name="770" href="#770">770</a>     Mutator&lt;String&gt; m = createMutator(ko, se);
+<a name="771" href="#771">771</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; rowCount; ++i) {
+<a name="772" href="#772">772</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; scCount; ++j) {
+<a name="773" href="#773">773</a>         @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a name="774" href="#774">774</a>         HSuperColumn&lt;String, String, String&gt; sc = createSuperColumn(
+<a name="775" href="#775">775</a>             scPrefix + j,
+<a name="776" href="#776">776</a>             Arrays.asList(createColumn(<span class="jxr_string">"c0"</span> + i + j, <span class="jxr_string">"v0"</span> + i + j, se, se),
+<a name="777" href="#777">777</a>                 createColumn(<span class="jxr_string">"c1"</span> + 1 + j, <span class="jxr_string">"v1"</span> + i + j, se, se)), se, se, se);
+<a name="778" href="#778">778</a>         m.addInsertion(rowPrefix + i, cf, sc);
+<a name="779" href="#779">779</a>       }
+<a name="780" href="#780">780</a>     }
+<a name="781" href="#781">781</a>     m.execute();
+<a name="782" href="#782">782</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a>(cf, rowCount, rowPrefix, scCount, scPrefix);
+<a name="783" href="#783">783</a>   }
+<a name="784" href="#784">784</a> 
+<a name="785" href="#785">785</a>   <strong class="jxr_keyword">private</strong> <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> insertColumns(String cf, <strong class="jxr_keyword">int</strong> rowCount, String rowPrefix,
+<a name="786" href="#786">786</a>       <strong class="jxr_keyword">int</strong> columnCount, String columnPrefix) {
+<a name="787" href="#787">787</a>     Mutator&lt;String&gt; m = createMutator(ko, se);
+<a name="788" href="#788">788</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; rowCount; ++i) {
+<a name="789" href="#789">789</a>       <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; columnCount; ++j) {
+<a name="790" href="#790">790</a>         m.addInsertion(rowPrefix + i, cf, createColumn(columnPrefix + j, <span class="jxr_string">"value"</span> + i + j, se, se));
+<a name="791" href="#791">791</a>       }
+<a name="792" href="#792">792</a>     }
+<a name="793" href="#793">793</a>     MutationResult mr = m.execute();
+<a name="794" href="#794">794</a>     assertTrue(<span class="jxr_string">"Time should be &gt; 0"</span>, mr.getExecutionTimeMicro() &gt; 0);
+<a name="795" href="#795">795</a>     log.debug(<span class="jxr_string">"insert execution time: {}"</span>, mr.getExecutionTimeMicro());
+<a name="796" href="#796">796</a>     log.debug(mr.toString());
+<a name="797" href="#797">797</a>     <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a>(cf, rowCount, rowPrefix, columnCount, columnPrefix);
+<a name="798" href="#798">798</a>   }
+<a name="799" href="#799">799</a> 
+<a name="800" href="#800">800</a>   <em class="jxr_javadoccomment">/**</em>
+<a name="801" href="#801">801</a> <em class="jxr_javadoccomment">   * A class describing what kind of cleanup is required at the end of the test. Just some</em>
+<a name="802" href="#802">802</a> <em class="jxr_javadoccomment">   * bookeeping, that's all.</em>
+<a name="803" href="#803">803</a> <em class="jxr_javadoccomment">   *</em>
+<a name="804" href="#804">804</a> <em class="jxr_javadoccomment">   * @author Ran Tavory</em>
+<a name="805" href="#805">805</a> <em class="jxr_javadoccomment">   *</em>
+<a name="806" href="#806">806</a> <em class="jxr_javadoccomment">   */</em>
+<a name="807" href="#807">807</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a> {
+<a name="808" href="#808">808</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String cf;
+<a name="809" href="#809">809</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> rowCount;
+<a name="810" href="#810">810</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String rowPrefix;
+<a name="811" href="#811">811</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> columnCount;
+<a name="812" href="#812">812</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String columnsPrefix;
+<a name="813" href="#813">813</a> 
+<a name="814" href="#814">814</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../me/prettyprint/hector/api/ApiV2SystemTest.html">TestCleanupDescriptor</a>(String cf, <strong class="jxr_keyword">int</strong> rowCount, String rowPrefix, <strong class="jxr_keyword">int</strong> scCount,
+<a name="815" href="#815">815</a>         String scPrefix) {
+<a name="816" href="#816">816</a>       <strong class="jxr_keyword">this</strong>.cf = cf;
+<a name="817" href="#817">817</a>       <strong class="jxr_keyword">this</strong>.rowCount = rowCount;
+<a name="818" href="#818">818</a>       <strong class="jxr_keyword">this</strong>.rowPrefix = rowPrefix;
+<a name="819" href="#819">819</a>       <strong class="jxr_keyword">this</strong>.columnCount = scCount;
+<a name="820" href="#820">820</a>       <strong class="jxr_keyword">this</strong>.columnsPrefix = scPrefix;
+<a name="821" href="#821">821</a>     }
+<a name="822" href="#822">822</a>   }
+<a name="823" href="#823">823</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+

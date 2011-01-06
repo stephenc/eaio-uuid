@@ -1,0 +1,118 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.cassandra.model;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import java.util.ArrayList;<a name="line.3"></a>
+<FONT color="green">004</FONT>    import java.util.Collections;<a name="line.4"></a>
+<FONT color="green">005</FONT>    import java.util.HashMap;<a name="line.5"></a>
+<FONT color="green">006</FONT>    import java.util.List;<a name="line.6"></a>
+<FONT color="green">007</FONT>    import java.util.Map;<a name="line.7"></a>
+<FONT color="green">008</FONT>    <a name="line.8"></a>
+<FONT color="green">009</FONT>    import me.prettyprint.cassandra.utils.Assert;<a name="line.9"></a>
+<FONT color="green">010</FONT>    import me.prettyprint.hector.api.Serializer;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import me.prettyprint.hector.api.beans.ColumnSlice;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import me.prettyprint.hector.api.beans.HColumn;<a name="line.12"></a>
+<FONT color="green">013</FONT>    <a name="line.13"></a>
+<FONT color="green">014</FONT>    import org.apache.cassandra.thrift.Column;<a name="line.14"></a>
+<FONT color="green">015</FONT>    <a name="line.15"></a>
+<FONT color="green">016</FONT>    public final class ColumnSliceImpl&lt;N,V&gt; implements ColumnSlice&lt;N, V&gt; {<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>      private final Map&lt;N,HColumn&lt;N,V&gt;&gt; columnsMap;<a name="line.18"></a>
+<FONT color="green">019</FONT>      private final List&lt;HColumn&lt;N,V&gt;&gt; columnsList;<a name="line.19"></a>
+<FONT color="green">020</FONT>    <a name="line.20"></a>
+<FONT color="green">021</FONT>      public ColumnSliceImpl(List&lt;Column&gt; tColumns, Serializer&lt;N&gt; nameSerializer,<a name="line.21"></a>
+<FONT color="green">022</FONT>          Serializer&lt;V&gt; valueSerializer) {<a name="line.22"></a>
+<FONT color="green">023</FONT>        Assert.noneNull(tColumns, nameSerializer, valueSerializer);<a name="line.23"></a>
+<FONT color="green">024</FONT>        columnsMap = new HashMap&lt;N,HColumn&lt;N,V&gt;&gt;(tColumns.size());<a name="line.24"></a>
+<FONT color="green">025</FONT>        List&lt;HColumn&lt;N,V&gt;&gt; list = new ArrayList&lt;HColumn&lt;N,V&gt;&gt;(tColumns.size());<a name="line.25"></a>
+<FONT color="green">026</FONT>        for (Column c: tColumns) {<a name="line.26"></a>
+<FONT color="green">027</FONT>          HColumn&lt;N, V&gt; column = new HColumnImpl&lt;N,V&gt;(c, nameSerializer, valueSerializer);<a name="line.27"></a>
+<FONT color="green">028</FONT>          columnsMap.put(column.getName(), column);<a name="line.28"></a>
+<FONT color="green">029</FONT>          list.add(column);<a name="line.29"></a>
+<FONT color="green">030</FONT>        }<a name="line.30"></a>
+<FONT color="green">031</FONT>        columnsList = Collections.unmodifiableList(list);<a name="line.31"></a>
+<FONT color="green">032</FONT>      }<a name="line.32"></a>
+<FONT color="green">033</FONT>    <a name="line.33"></a>
+<FONT color="green">034</FONT>      /**<a name="line.34"></a>
+<FONT color="green">035</FONT>       *<a name="line.35"></a>
+<FONT color="green">036</FONT>       * @return an unmodifiable list of the columns<a name="line.36"></a>
+<FONT color="green">037</FONT>       */<a name="line.37"></a>
+<FONT color="green">038</FONT>      @Override<a name="line.38"></a>
+<FONT color="green">039</FONT>      public List&lt;HColumn&lt;N,V&gt;&gt; getColumns() {<a name="line.39"></a>
+<FONT color="green">040</FONT>        return columnsList;<a name="line.40"></a>
+<FONT color="green">041</FONT>      }<a name="line.41"></a>
+<FONT color="green">042</FONT>    <a name="line.42"></a>
+<FONT color="green">043</FONT>      @Override<a name="line.43"></a>
+<FONT color="green">044</FONT>      public HColumn&lt;N, V&gt; getColumnByName(N columnName) {<a name="line.44"></a>
+<FONT color="green">045</FONT>        return columnsMap.get(columnName);<a name="line.45"></a>
+<FONT color="green">046</FONT>      }<a name="line.46"></a>
+<FONT color="green">047</FONT>    <a name="line.47"></a>
+<FONT color="green">048</FONT>      @Override<a name="line.48"></a>
+<FONT color="green">049</FONT>      public String toString() {<a name="line.49"></a>
+<FONT color="green">050</FONT>        return "ColumnSlice(" + columnsList + ")";<a name="line.50"></a>
+<FONT color="green">051</FONT>      }<a name="line.51"></a>
+<FONT color="green">052</FONT>    }<a name="line.52"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+<title>MultigetCountQuery xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../apidocs/me/prettyprint/cassandra/model/MultigetCountQuery.html">View Javadoc</a></div><pre>
+
+<a name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> me.prettyprint.cassandra.model;
+<a name="2" href="#2">2</a>   
+<a name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> java.util.List;
+<a name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> java.util.Map;
+<a name="6" href="#6">6</a>   
+<a name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> me.prettyprint.cassandra.service.KeyspaceService;
+<a name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> me.prettyprint.cassandra.utils.Assert;
+<a name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.Keyspace;
+<a name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.Serializer;
+<a name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.exceptions.HectorException;
+<a name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.Query;
+<a name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> me.prettyprint.hector.api.query.QueryResult;
+<a name="14" href="#14">14</a>  
+<a name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.apache.cassandra.thrift.ColumnParent;
+<a name="16" href="#16">16</a>  
+<a name="17" href="#17">17</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> MultigetCountQuery&lt;K,N&gt; implements Query&lt;Map&lt;K, Integer&gt;&gt; {
+<a name="18" href="#18">18</a>  
+<a name="19" href="#19">19</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../me/prettyprint/cassandra/model/ExecutingKeyspace.html">ExecutingKeyspace</a> keyspace;
+<a name="20" href="#20">20</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Serializer&lt;K&gt; keySerializer;
+<a name="21" href="#21">21</a>    <strong class="jxr_keyword">protected</strong> String columnFamily;
+<a name="22" href="#22">22</a>    <strong class="jxr_keyword">protected</strong> List&lt;K&gt; keys;
+<a name="23" href="#23">23</a>  
+<a name="24" href="#24">24</a>    <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> The slice predicate for which the count it performed*/</em>
+<a name="25" href="#25">25</a>    <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> HSlicePredicate&lt;N&gt; slicePredicate;
+<a name="26" href="#26">26</a>  
+<a name="27" href="#27">27</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../me/prettyprint/cassandra/model/MultigetCountQuery.html">MultigetCountQuery</a>(<a href="../../../../me/prettyprint/hector/api/Keyspace.html">Keyspace</a> k, Serializer&lt;K&gt; keySerializer,
+<a name="28" href="#28">28</a>        Serializer&lt;N&gt; nameSerializer) {
+<a name="29" href="#29">29</a>      Assert.notNull(k, <span class="jxr_string">"keyspace can't be null"</span>);
+<a name="30" href="#30">30</a>      Assert.notNull(keySerializer, <span class="jxr_string">"keySerializer can't be null"</span>);
+<a name="31" href="#31">31</a>      Assert.notNull(nameSerializer, <span class="jxr_string">"columnNameSerializer is null"</span>);
+<a name="32" href="#32">32</a>      <strong class="jxr_keyword">this</strong>.keyspace = (ExecutingKeyspace) k;
+<a name="33" href="#33">33</a>      <strong class="jxr_keyword">this</strong>.keySerializer = keySerializer;
+<a name="34" href="#34">34</a>      <strong class="jxr_keyword">this</strong>.slicePredicate = <strong class="jxr_keyword">new</strong> HSlicePredicate&lt;N&gt;(nameSerializer);
+<a name="35" href="#35">35</a>    }
+<a name="36" href="#36">36</a>  
+<a name="37" href="#37">37</a>    <strong class="jxr_keyword">public</strong> MultigetCountQuery&lt;K, N&gt; setKeys(K... keys) {
+<a name="38" href="#38">38</a>      <strong class="jxr_keyword">this</strong>.keys = Arrays.asList(keys);
+<a name="39" href="#39">39</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a name="40" href="#40">40</a>    }
+<a name="41" href="#41">41</a>  
+<a name="42" href="#42">42</a>    <strong class="jxr_keyword">public</strong> MultigetCountQuery&lt;K,N&gt; setColumnFamily(String cf) {
+<a name="43" href="#43">43</a>      <strong class="jxr_keyword">this</strong>.columnFamily = cf;
+<a name="44" href="#44">44</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a name="45" href="#45">45</a>    }
+<a name="46" href="#46">46</a>  
+<a name="47" href="#47">47</a>    <strong class="jxr_keyword">public</strong> MultigetCountQuery&lt;K,N&gt; setColumnNames(N... columnNames) {
+<a name="48" href="#48">48</a>      slicePredicate.setColumnNames(columnNames);
+<a name="49" href="#49">49</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a name="50" href="#50">50</a>    }
+<a name="51" href="#51">51</a>  
+<a name="52" href="#52">52</a>    <strong class="jxr_keyword">public</strong> MultigetCountQuery&lt;K,N&gt; setRange(N start, N finish, <strong class="jxr_keyword">int</strong> count) {
+<a name="53" href="#53">53</a>      slicePredicate.setRange(start, finish, false, count);
+<a name="54" href="#54">54</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a name="55" href="#55">55</a>    }
+<a name="56" href="#56">56</a>  
+<a name="57" href="#57">57</a>    @Override
+<a name="58" href="#58">58</a>    <strong class="jxr_keyword">public</strong> QueryResult&lt;Map&lt;K, Integer&gt;&gt; execute() {
+<a name="59" href="#59">59</a>      Assert.notNull(keys, <span class="jxr_string">"keys list is null"</span>);
+<a name="60" href="#60">60</a>      Assert.notNull(columnFamily, <span class="jxr_string">"columnFamily is null"</span>);
+<a name="61" href="#61">61</a>      <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryResultImpl&lt;Map&lt;K,Integer&gt;&gt;(keyspace.doExecute(
+<a name="62" href="#62">62</a>          <strong class="jxr_keyword">new</strong> KeyspaceOperationCallback&lt;Map&lt;K,Integer&gt;&gt;() {
+<a name="63" href="#63">63</a>            @Override
+<a name="64" href="#64">64</a>            <strong class="jxr_keyword">public</strong> Map&lt;K,Integer&gt; doInKeyspace(<a href="../../../../me/prettyprint/cassandra/service/KeyspaceService.html">KeyspaceService</a> ks) <strong class="jxr_keyword">throws</strong> HectorException {
+<a name="65" href="#65">65</a>              ColumnParent columnParent = <strong class="jxr_keyword">new</strong> ColumnParent(columnFamily);
+<a name="66" href="#66">66</a>              Map&lt;K,Integer&gt; counts = keySerializer.fromBytesMap(
+<a name="67" href="#67">67</a>                  ks.multigetCount(keySerializer.toBytesList(keys), columnParent, slicePredicate.toThrift()));
+<a name="68" href="#68">68</a>              <strong class="jxr_keyword">return</strong> counts;
+<a name="69" href="#69">69</a>            }
+<a name="70" href="#70">70</a>          }), <strong class="jxr_keyword">this</strong>);
+<a name="71" href="#71">71</a>    }
+<a name="72" href="#72">72</a>  
+<a name="73" href="#73">73</a>    @Override
+<a name="74" href="#74">74</a>    <strong class="jxr_keyword">public</strong> String toString() {
+<a name="75" href="#75">75</a>     <strong class="jxr_keyword">return</strong> String.format(<span class="jxr_string">"MultigetCountQuery(%s) on cf: %s with keys: %s"</span>,slicePredicate.toString(),columnFamily,keys.toString());
+<a name="76" href="#76">76</a>    }
+<a name="77" href="#77">77</a>  
+<a name="78" href="#78">78</a>  }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+
