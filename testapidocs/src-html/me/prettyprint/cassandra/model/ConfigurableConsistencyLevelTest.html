@@ -1,0 +1,115 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.cassandra.model;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import static org.junit.Assert.assertEquals;<a name="line.3"></a>
+<FONT color="green">004</FONT>    <a name="line.4"></a>
+<FONT color="green">005</FONT>    import java.util.HashMap;<a name="line.5"></a>
+<FONT color="green">006</FONT>    import java.util.Map;<a name="line.6"></a>
+<FONT color="green">007</FONT>    <a name="line.7"></a>
+<FONT color="green">008</FONT>    import me.prettyprint.cassandra.service.OperationType;<a name="line.8"></a>
+<FONT color="green">009</FONT>    import me.prettyprint.hector.api.HConsistencyLevel;<a name="line.9"></a>
+<FONT color="green">010</FONT>    <a name="line.10"></a>
+<FONT color="green">011</FONT>    import org.junit.Before;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import org.junit.Test;<a name="line.12"></a>
+<FONT color="green">013</FONT>    <a name="line.13"></a>
+<FONT color="green">014</FONT>    public class ConfigurableConsistencyLevelTest {<a name="line.14"></a>
+<FONT color="green">015</FONT>    <a name="line.15"></a>
+<FONT color="green">016</FONT>      private ConfigurableConsistencyLevel configurableConsistencyLevel;<a name="line.16"></a>
+<FONT color="green">017</FONT>      private Map&lt;String, HConsistencyLevel&gt; clmap;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>      @Before<a name="line.19"></a>
+<FONT color="green">020</FONT>      public void setup() {<a name="line.20"></a>
+<FONT color="green">021</FONT>        configurableConsistencyLevel = new ConfigurableConsistencyLevel();<a name="line.21"></a>
+<FONT color="green">022</FONT>        clmap = new HashMap&lt;String, HConsistencyLevel&gt;();<a name="line.22"></a>
+<FONT color="green">023</FONT>        clmap.put("MyColumnFamily", HConsistencyLevel.ONE);<a name="line.23"></a>
+<FONT color="green">024</FONT>        configurableConsistencyLevel.setReadCfConsistencyLevels(clmap);<a name="line.24"></a>
+<FONT color="green">025</FONT>        configurableConsistencyLevel.setWriteCfConsistencyLevels(clmap);<a name="line.25"></a>
+<FONT color="green">026</FONT>      }<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>      @Test<a name="line.28"></a>
+<FONT color="green">029</FONT>      public void testReadWriteSame() {<a name="line.29"></a>
+<FONT color="green">030</FONT>        assertEquals(HConsistencyLevel.ONE,<a name="line.30"></a>
+<FONT color="green">031</FONT>            configurableConsistencyLevel.get(OperationType.READ, "MyColumnFamily"));<a name="line.31"></a>
+<FONT color="green">032</FONT>      }<a name="line.32"></a>
+<FONT color="green">033</FONT>    <a name="line.33"></a>
+<FONT color="green">034</FONT>      @Test<a name="line.34"></a>
+<FONT color="green">035</FONT>      public void testDefaults() {<a name="line.35"></a>
+<FONT color="green">036</FONT>        configurableConsistencyLevel.setDefaultWriteConsistencyLevel(HConsistencyLevel.ALL);<a name="line.36"></a>
+<FONT color="green">037</FONT>        configurableConsistencyLevel.setWriteCfConsistencyLevels(new HashMap&lt;String, HConsistencyLevel&gt;());<a name="line.37"></a>
+<FONT color="green">038</FONT>        assertEquals(HConsistencyLevel.ALL,<a name="line.38"></a>
+<FONT color="green">039</FONT>            configurableConsistencyLevel.get(OperationType.WRITE, "MyColumnFamily"));<a name="line.39"></a>
+<FONT color="green">040</FONT>      }<a name="line.40"></a>
+<FONT color="green">041</FONT>    <a name="line.41"></a>
+<FONT color="green">042</FONT>      @Test<a name="line.42"></a>
+<FONT color="green">043</FONT>      public void testSetRuntimeCl() {<a name="line.43"></a>
+<FONT color="green">044</FONT>        configurableConsistencyLevel.setConsistencyLevelForCfOperation(HConsistencyLevel.ANY,<a name="line.44"></a>
+<FONT color="green">045</FONT>            "OtherCf", OperationType.READ);<a name="line.45"></a>
+<FONT color="green">046</FONT>        assertEquals(HConsistencyLevel.ANY,<a name="line.46"></a>
+<FONT color="green">047</FONT>            configurableConsistencyLevel.get(OperationType.READ, "OtherCf"));<a name="line.47"></a>
+<FONT color="green">048</FONT>      }<a name="line.48"></a>
+<FONT color="green">049</FONT>    }<a name="line.49"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

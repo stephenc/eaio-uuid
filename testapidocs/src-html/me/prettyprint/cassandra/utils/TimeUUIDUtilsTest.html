@@ -1,0 +1,134 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.cassandra.utils;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import static org.junit.Assert.assertEquals;<a name="line.3"></a>
+<FONT color="green">004</FONT>    import static org.junit.Assert.assertTrue;<a name="line.4"></a>
+<FONT color="green">005</FONT>    <a name="line.5"></a>
+<FONT color="green">006</FONT>    import java.util.UUID;<a name="line.6"></a>
+<FONT color="green">007</FONT>    <a name="line.7"></a>
+<FONT color="green">008</FONT>    import me.prettyprint.cassandra.service.clock.MicrosecondsClockResolution;<a name="line.8"></a>
+<FONT color="green">009</FONT>    import me.prettyprint.cassandra.service.clock.MicrosecondsSyncClockResolution;<a name="line.9"></a>
+<FONT color="green">010</FONT>    import me.prettyprint.hector.api.ClockResolution;<a name="line.10"></a>
+<FONT color="green">011</FONT>    <a name="line.11"></a>
+<FONT color="green">012</FONT>    import org.junit.Test;<a name="line.12"></a>
+<FONT color="green">013</FONT>    <a name="line.13"></a>
+<FONT color="green">014</FONT>    import com.eaio.uuid.UUIDGen;<a name="line.14"></a>
+<FONT color="green">015</FONT>    <a name="line.15"></a>
+<FONT color="green">016</FONT>    /**<a name="line.16"></a>
+<FONT color="green">017</FONT>     * Test @link {@link TimeUUIDUtils}<a name="line.17"></a>
+<FONT color="green">018</FONT>     *<a name="line.18"></a>
+<FONT color="green">019</FONT>     * @author Patricio Echague (pechague@gmail.com)<a name="line.19"></a>
+<FONT color="green">020</FONT>     *<a name="line.20"></a>
+<FONT color="green">021</FONT>     */<a name="line.21"></a>
+<FONT color="green">022</FONT>    public class TimeUUIDUtilsTest {<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>      /**<a name="line.24"></a>
+<FONT color="green">025</FONT>       * This test must be placed FIRST. Please don't change the order.<a name="line.25"></a>
+<FONT color="green">026</FONT>       * @throws Exception<a name="line.26"></a>
+<FONT color="green">027</FONT>       */<a name="line.27"></a>
+<FONT color="green">028</FONT>      @Test<a name="line.28"></a>
+<FONT color="green">029</FONT>      public void testTimeUUIDWithClockResolution() throws Exception {<a name="line.29"></a>
+<FONT color="green">030</FONT>        ClockResolution clock = new MicrosecondsClockResolution();<a name="line.30"></a>
+<FONT color="green">031</FONT>        long time = clock.createClock();<a name="line.31"></a>
+<FONT color="green">032</FONT>    <a name="line.32"></a>
+<FONT color="green">033</FONT>        // Invoke twice with same time. Both generated UUID should be the same.<a name="line.33"></a>
+<FONT color="green">034</FONT>        // Test improved algorithm.<a name="line.34"></a>
+<FONT color="green">035</FONT>        assertEquals(TimeUUIDUtils.getTimeUUID(time),<a name="line.35"></a>
+<FONT color="green">036</FONT>            java.util.UUID.fromString(<a name="line.36"></a>
+<FONT color="green">037</FONT>                new com.eaio.uuid.UUID(UUIDGen.createTime(time), UUIDGen.getClockSeqAndNode()).toString()));<a name="line.37"></a>
+<FONT color="green">038</FONT>    <a name="line.38"></a>
+<FONT color="green">039</FONT>        clock = new MicrosecondsSyncClockResolution();<a name="line.39"></a>
+<FONT color="green">040</FONT>        // Invoke twice with a clockResolution that guarantees unique timestamp. The second must be greater<a name="line.40"></a>
+<FONT color="green">041</FONT>        // than the first one.<a name="line.41"></a>
+<FONT color="green">042</FONT>        java.util.UUID first = TimeUUIDUtils.getTimeUUID(clock);<a name="line.42"></a>
+<FONT color="green">043</FONT>        java.util.UUID second = TimeUUIDUtils.getTimeUUID(clock);<a name="line.43"></a>
+<FONT color="green">044</FONT>        assertTrue(second.compareTo(first) &gt; 0);<a name="line.44"></a>
+<FONT color="green">045</FONT>      }<a name="line.45"></a>
+<FONT color="green">046</FONT>    <a name="line.46"></a>
+<FONT color="green">047</FONT>      @Test<a name="line.47"></a>
+<FONT color="green">048</FONT>      public void testTimeUUIDAsByteArray() {<a name="line.48"></a>
+<FONT color="green">049</FONT>        // Generate UUID, convert to array and back to UUID. Then assert.<a name="line.49"></a>
+<FONT color="green">050</FONT>        UUID uuid = TimeUUIDUtils.getUniqueTimeUUIDinMillis();<a name="line.50"></a>
+<FONT color="green">051</FONT>        UUID uuidAfterConversion = TimeUUIDUtils.toUUID(TimeUUIDUtils.asByteArray(uuid));<a name="line.51"></a>
+<FONT color="green">052</FONT>        assertEquals(uuid, uuidAfterConversion);<a name="line.52"></a>
+<FONT color="green">053</FONT>    <a name="line.53"></a>
+<FONT color="green">054</FONT>        // Used the previously generated UUID, convert to array and back to UUID. Then compare their times.<a name="line.54"></a>
+<FONT color="green">055</FONT>        long timeInUUID = TimeUUIDUtils.getTimeFromUUID(TimeUUIDUtils.asByteArray(uuid));<a name="line.55"></a>
+<FONT color="green">056</FONT>        assertEquals(uuid.timestamp(), timeInUUID);<a name="line.56"></a>
+<FONT color="green">057</FONT>      }<a name="line.57"></a>
+<FONT color="green">058</FONT>    <a name="line.58"></a>
+<FONT color="green">059</FONT>      @Test<a name="line.59"></a>
+<FONT color="green">060</FONT>      public void testTimeUUIDAsByteBuffer() {<a name="line.60"></a>
+<FONT color="green">061</FONT>        UUID expectedUuid = TimeUUIDUtils.getUniqueTimeUUIDinMillis();<a name="line.61"></a>
+<FONT color="green">062</FONT>        UUID actualUuid = TimeUUIDUtils.uuid(TimeUUIDUtils.asByteBuffer(expectedUuid));<a name="line.62"></a>
+<FONT color="green">063</FONT>        assertEquals(expectedUuid, actualUuid);<a name="line.63"></a>
+<FONT color="green">064</FONT>      }<a name="line.64"></a>
+<FONT color="green">065</FONT>    <a name="line.65"></a>
+<FONT color="green">066</FONT>    <a name="line.66"></a>
+<FONT color="green">067</FONT>    <a name="line.67"></a>
+<FONT color="green">068</FONT>    }<a name="line.68"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

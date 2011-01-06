@@ -1,1 +1,10 @@
-com.eaio.uuid
+me.prettyprint.cassandra
+me.prettyprint.cassandra.connection
+me.prettyprint.cassandra.dao
+me.prettyprint.cassandra.examples
+me.prettyprint.cassandra.jndi
+me.prettyprint.cassandra.model
+me.prettyprint.cassandra.serializers
+me.prettyprint.cassandra.service
+me.prettyprint.cassandra.utils
+me.prettyprint.hector.api

@@ -1,24 +1,31 @@
 -classpath
-'/home/stephenc/src/eaio-uuid/target/checkout/target/classes'
+'/home/stephenc/src/hector/target/checkout/target/classes:/home/stephenc/src/hector/target/checkout/core/target/classes:/home/stephenc/.m2/repository/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar:/home/stephenc/.m2/repository/commons-lang/commons-lang/2.4/commons-lang-2.4.jar:/home/stephenc/.m2/repository/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar:/home/stephenc/.m2/repository/org/mortbay/jetty/servlet-api/2.5-20081211/servlet-api-2.5-20081211.jar:/home/stephenc/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.4.0/jackson-core-asl-1.4.0.jar:/home/stephenc/.m2/repository/org/safehaus/jug/jug/2.0.0/jug-2.0.0-asl.jar:/home/stephenc/.m2/repository/org/codehaus/jackson/jackson-mapper-asl/1.4.0/jackson-mapper-asl-1.4.0.jar:/home/stephenc/.m2/repository/com/google/guava/guava/r05/guava-r05.jar:/home/stephenc/.m2/repository/com/googlecode/json-simple/json-simple/1.1/json-simple-1.1.jar:/home/stephenc/.m2/repository/org/apache/cassandra/cassandra-all/0.7.0-rc4/cassandra-all-0.7.0-rc4.jar:/home/stephenc/.m2/repository/antlr/antlr/2.7.7/antlr-2.7.7.jar:/home/stephenc/.m2/repository/commons-pool/commons-pool/1.5.3/commons-pool-1.5.3.jar:/home/stephenc/.m2/repository/com/github/stephenc/eaio-uuid/uuid/3.2.0/uuid-3.2.0.jar:/home/stephenc/.m2/repository/org/antlr/antlr/3.1.3/antlr-3.1.3.jar:/home/stephenc/.m2/repository/commons-cli/commons-cli/1.1/commons-cli-1.1.jar:/home/stephenc/.m2/repository/org/perf4j/perf4j/0.9.12/perf4j-0.9.12.jar:/home/stephenc/.m2/repository/jline/jline/0.9.94/jline-0.9.94.jar:/home/stephenc/.m2/repository/org/apache/cassandra/deps/avro/1.4.0-cassandra-1/avro-1.4.0-cassandra-1.jar:/home/stephenc/.m2/repository/org/antlr/antlr-runtime/3.1.3/antlr-runtime-3.1.3.jar:/home/stephenc/.m2/repository/org/mortbay/jetty/jetty-util/6.1.21/jetty-util-6.1.21.jar:/home/stephenc/.m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar:/home/stephenc/.m2/repository/com/github/stephenc/high-scale-lib/high-scale-lib/1.1.1/high-scale-lib-1.1.1.jar:/home/stephenc/.m2/repository/com/googlecode/concurrentlinkedhashmap/concurrentlinkedhashmap-lru/1.1/concurrentlinkedhashmap-lru-1.1.jar:/home/stephenc/.m2/repository/org/osgi/osgi_R4_compendium/1.0/osgi_R4_compendium-1.0.jar:/home/stephenc/.m2/repository/org/mortbay/jetty/jetty/6.1.21/jetty-6.1.21.jar:/home/stephenc/.m2/repository/org/yaml/snakeyaml/1.6/snakeyaml-1.6.jar:/home/stephenc/.m2/repository/org/osgi/osgi_R4_core/1.0/osgi_R4_core-1.0.jar:/home/stephenc/.m2/repository/org/apache/cassandra/cassandra-javautils/0.7.0-rc4/cassandra-javautils-0.7.0-rc4.jar:/home/stephenc/.m2/repository/commons-codec/commons-codec/1.2/commons-codec-1.2.jar:/home/stephenc/.m2/repository/org/apache/cassandra/deps/libthrift/0.5.0/libthrift-0.5.0.jar'
 -encoding
 'UTF-8'
 -protected
+-source
+'1.6'
 -sourcepath
-'/home/stephenc/src/eaio-uuid/target/checkout/src/main/java'
+'/home/stephenc/src/hector/target/checkout/core/src/main/java'
 -author
 -bottom
-'Copyright &#169; 2003-2011. All Rights Reserved.'
+'Copyright &#169; 2011. All Rights Reserved.'
 -charset
 'UTF-8'
 -d
-'/home/stephenc/src/eaio-uuid/target/checkout/target/site/apidocs'
+'/home/stephenc/src/hector/target/checkout/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
-'UUID 3.2.0 API'
+'hector 0.7.0-rc4-1 API'
 -link
-'http://java.sun.com/j2se/1.5.0/docs/api'
+'http://java.sun.com/j2se/1.6.0/docs/api'
+-link
+'http://logging.apache.org/log4j/docs/api'
+-link
+'http://java.sun.com/javase/6/docs/api'
+-linksource
 -use
 -version
 -windowtitle
-'UUID 3.2.0 API'
+'hector 0.7.0-rc4-1 API'

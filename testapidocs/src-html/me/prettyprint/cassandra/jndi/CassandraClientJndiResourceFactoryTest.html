@@ -1,0 +1,131 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package me.prettyprint.cassandra.jndi;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import static org.junit.Assert.assertEquals;<a name="line.3"></a>
+<FONT color="green">004</FONT>    import static org.junit.Assert.assertNotNull;<a name="line.4"></a>
+<FONT color="green">005</FONT>    import static org.mockito.Mockito.mock;<a name="line.5"></a>
+<FONT color="green">006</FONT>    <a name="line.6"></a>
+<FONT color="green">007</FONT>    import java.io.IOException;<a name="line.7"></a>
+<FONT color="green">008</FONT>    import java.util.Hashtable;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    import javax.naming.Context;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import javax.naming.InitialContext;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import javax.naming.Name;<a name="line.12"></a>
+<FONT color="green">013</FONT>    import javax.naming.Reference;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import javax.naming.StringRefAddr;<a name="line.14"></a>
+<FONT color="green">015</FONT>    <a name="line.15"></a>
+<FONT color="green">016</FONT>    import me.prettyprint.cassandra.BaseEmbededServerSetupTest;<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    import org.junit.After;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import org.junit.Before;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import org.junit.Ignore;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import org.junit.Test;<a name="line.21"></a>
+<FONT color="green">022</FONT>    <a name="line.22"></a>
+<FONT color="green">023</FONT>    /**<a name="line.23"></a>
+<FONT color="green">024</FONT>     * @author Perry Hoekstra (dutchman_mn@charter.net)<a name="line.24"></a>
+<FONT color="green">025</FONT>     */<a name="line.25"></a>
+<FONT color="green">026</FONT>    @Ignore<a name="line.26"></a>
+<FONT color="green">027</FONT>    public class CassandraClientJndiResourceFactoryTest extends BaseEmbededServerSetupTest {<a name="line.27"></a>
+<FONT color="green">028</FONT>      // canned data<a name="line.28"></a>
+<FONT color="green">029</FONT>      private final static String cassandraUrl = "localhost";<a name="line.29"></a>
+<FONT color="green">030</FONT>      private final static int cassandraPort = 9170;<a name="line.30"></a>
+<FONT color="green">031</FONT>    <a name="line.31"></a>
+<FONT color="green">032</FONT>      private CassandraClientJndiResourceFactory factory;<a name="line.32"></a>
+<FONT color="green">033</FONT>    <a name="line.33"></a>
+<FONT color="green">034</FONT>      @Before<a name="line.34"></a>
+<FONT color="green">035</FONT>      public void setupCase() throws Exception {<a name="line.35"></a>
+<FONT color="green">036</FONT>        factory = new CassandraClientJndiResourceFactory();<a name="line.36"></a>
+<FONT color="green">037</FONT>      }<a name="line.37"></a>
+<FONT color="green">038</FONT>    <a name="line.38"></a>
+<FONT color="green">039</FONT>      @After<a name="line.39"></a>
+<FONT color="green">040</FONT>      public void teardownCase() throws IOException {<a name="line.40"></a>
+<FONT color="green">041</FONT>        factory = null;<a name="line.41"></a>
+<FONT color="green">042</FONT>      }<a name="line.42"></a>
+<FONT color="green">043</FONT>    <a name="line.43"></a>
+<FONT color="green">044</FONT>      @Test<a name="line.44"></a>
+<FONT color="green">045</FONT>      public void getObjectInstance() throws Exception {<a name="line.45"></a>
+<FONT color="green">046</FONT>        Reference resource = new Reference("CassandraClientFactory");<a name="line.46"></a>
+<FONT color="green">047</FONT>    <a name="line.47"></a>
+<FONT color="green">048</FONT>        resource.add(new StringRefAddr("url", cassandraUrl));<a name="line.48"></a>
+<FONT color="green">049</FONT>        resource.add(new StringRefAddr("port", Integer.toString(cassandraPort)));<a name="line.49"></a>
+<FONT color="green">050</FONT>    <a name="line.50"></a>
+<FONT color="green">051</FONT>        Name jndiName = mock(Name.class);<a name="line.51"></a>
+<FONT color="green">052</FONT>        Context context = new InitialContext();<a name="line.52"></a>
+<FONT color="green">053</FONT>        Hashtable&lt;String, String&gt; environment = new Hashtable&lt;String, String&gt;();<a name="line.53"></a>
+<FONT color="green">054</FONT>    <a name="line.54"></a>
+<FONT color="green">055</FONT>        CassandraClientJndiResourcePool cassandraClientJNDIResourcePool =<a name="line.55"></a>
+<FONT color="green">056</FONT>          (CassandraClientJndiResourcePool) factory.getObjectInstance(resource, jndiName, context,<a name="line.56"></a>
+<FONT color="green">057</FONT>              environment);<a name="line.57"></a>
+<FONT color="green">058</FONT>    <a name="line.58"></a>
+<FONT color="green">059</FONT>        //CassandraClient cassandraClient = (CassandraClient) cassandraClientJNDIResourcePool.borrowObject();<a name="line.59"></a>
+<FONT color="green">060</FONT>        // TODO fix this<a name="line.60"></a>
+<FONT color="green">061</FONT>        //assertNotNull(cassandraClient);<a name="line.61"></a>
+<FONT color="green">062</FONT>        //assertEquals(cassandraUrl, cassandraClient.getCassandraHost().getHost());<a name="line.62"></a>
+<FONT color="green">063</FONT>        //assertEquals(cassandraPort, cassandraClient.getCassandraHost().getPort());<a name="line.63"></a>
+<FONT color="green">064</FONT>      }<a name="line.64"></a>
+<FONT color="green">065</FONT>    }<a name="line.65"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
