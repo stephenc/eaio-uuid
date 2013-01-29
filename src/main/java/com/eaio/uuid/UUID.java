@@ -27,10 +27,7 @@
  */
 package com.eaio.uuid;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 import org.omg.CORBA.portable.IDLEntity;
 
@@ -52,9 +49,9 @@ import com.eaio.util.lang.Hex;
  * </a>
  * @see <a href="http://johannburkard.de/software/uuid/">UUID</a>
  * @author <a href="mailto:jb@eaio.de">Johann Burkard</a>
- * @version $Id: UUID.java 1888 2009-03-15 12:43:24Z johann $
+ * @version $Id: UUID.java 4688 2012-03-09 14:49:49Z johann $
  */
-public class UUID implements Comparable<UUID>, Serializable, Cloneable,
+public class UUID implements Comparable<UUID>, Externalizable, Cloneable,
         IDLEntity {
 
     /**
@@ -151,22 +148,16 @@ public class UUID implements Comparable<UUID>, Serializable, Cloneable,
 
     /**
      * Tweaked Serialization routine.
-     *
-     * @param out the ObjectOutputStream
-     * @throws IOException
      */
-    private void writeObject(ObjectOutputStream out) throws IOException {
+    public void writeExternal(ObjectOutput out) throws IOException {
         out.writeLong(time);
         out.writeLong(clockSeqAndNode);
     }
 
     /**
      * Tweaked Serialization routine.
-     *
-     * @param in the ObjectInputStream
-     * @throws IOException
      */
-    private void readObject(ObjectInputStream in) throws IOException {
+    public void readExternal(ObjectInput in) throws IOException {
         time = in.readLong();
         clockSeqAndNode = in.readLong();
     }

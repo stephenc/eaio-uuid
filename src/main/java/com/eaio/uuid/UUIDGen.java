@@ -57,7 +57,7 @@ import com.eaio.util.lang.Hex;
  *
  * @see <a href="http://johannburkard.de/software/uuid/">UUID</a>
  * @author <a href="mailto:jb@eaio.de">Johann Burkard</a>
- * @version $Id: UUIDGen.java 2914 2010-04-23 11:35:00Z johann $
+ * @version $Id: UUIDGen.java 4688 2012-03-09 14:49:49Z johann $
  * @see com.eaio.uuid.UUID
  */
 public final class UUIDGen {
@@ -73,7 +73,7 @@ public final class UUIDGen {
      * The last time value. Used to remove duplicate UUIDs.
      */
     private static long lastTime = Long.MIN_VALUE;
-    
+
     /**
      * The cached MAC address.
      */
@@ -116,21 +116,27 @@ public final class UUIDGen {
             BufferedReader in = null;
 
             try {
-                String osname = System.getProperty("os.name", "");
+                String osname = System.getProperty("os.name", ""), osver = System.getProperty("os.version", "");
 
                 if (osname.startsWith("Windows")) {
                     p = Runtime.getRuntime().exec(
                             new String[] { "ipconfig", "/all" }, null);
                 }
+
                 // Solaris code must appear before the generic code
                 else if (osname.startsWith("Solaris")
                         || osname.startsWith("SunOS")) {
-                    String hostName = getFirstLineOfCommand(
-                            "uname", "-n" );
-                    if (hostName != null) {
+                    if (osver.startsWith("5.11")) {
                         p = Runtime.getRuntime().exec(
-                                new String[] { "/usr/sbin/arp", hostName },
-                                null);
+                        new String[] { "dladm", "show-phys", "-m" }, null);
+                    }
+                    else {
+                        String hostName = getFirstLineOfCommand("uname", "-n");
+                        if (hostName != null) {
+                            p = Runtime.getRuntime().exec(
+                                    new String[] { "/usr/sbin/arp", hostName },
+                                    null);
+                        }
                     }
                 }
                 else if (new File("/usr/sbin/lanscan").exists()) {
@@ -214,7 +220,7 @@ public final class UUIDGen {
 
     /**
      * Returns the current clockSeqAndNode value.
-     *
+     * 
      * @return the clockSeqAndNode value
      * @see UUID#getClockSeqAndNode()
      */
@@ -225,14 +231,14 @@ public final class UUIDGen {
     /**
      * Generates a new time field. Each time field is unique and larger than the
      * previously generated time field.
-     *
+     * 
      * @return a new time value
      * @see UUID#getTime()
      */
     public static long newTime() {
         return createTime(System.currentTimeMillis());
     }
-    
+
     /**
      * Creates a new time field from the given timestamp. Note that even identical
      * values of <code>currentTimeMillis</code> will produce different time fields.
@@ -271,7 +277,7 @@ public final class UUIDGen {
         return time;
 
     }
-    
+
     /**
      * Returns the MAC address. Not guaranteed to return anything.
      * 
@@ -283,7 +289,7 @@ public final class UUIDGen {
 
     /**
      * Returns the first line of the shell command.
-     *
+     * 
      * @param commands the commands to run
      * @return the first line of the command
      * @throws IOException
