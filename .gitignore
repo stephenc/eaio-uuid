@@ -1,8 +1,9 @@
-.project
 .classpath
-.settings
+.project
+.settings/
+.DS_Store
+target/
+.idea/
 *.iml
 *.ipr
 *.iws
-target/
-

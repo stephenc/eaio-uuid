@@ -39,6 +39,7 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 import com.eaio.util.lang.Hex;
+import com.eaio.util.lang.PaddedAtomicLong;
 
 /**
  * This class contains methods to generate UUID fields. These methods have been
@@ -72,7 +73,7 @@ public final class UUIDGen {
     /**
      * The last time value. Used to remove duplicate UUIDs.
      */
-    private static long lastTime = Long.MIN_VALUE;
+    private static PaddedAtomicLong lastTime = new PaddedAtomicLong(Long.MIN_VALUE);
 
     /**
      * The cached MAC address.
@@ -247,7 +248,7 @@ public final class UUIDGen {
      * @return a new time value
      * @see UUID#getTime()
      */
-    public static synchronized long createTime(long currentTimeMillis) {
+    public static long createTime(long currentTimeMillis) {
 
         long time;
 
@@ -255,11 +256,18 @@ public final class UUIDGen {
 
         long timeMillis = (currentTimeMillis * 10000) + 0x01B21DD213814000L;
 
-        if (timeMillis > lastTime) {
-            lastTime = timeMillis;
-        }
-        else {
-            timeMillis = ++lastTime;
+        while (true) {
+            long current = lastTime.get();
+            if (timeMillis > current) {
+                if(lastTime.compareAndSet(current, timeMillis)) {
+                    break;
+                }
+            } else {
+                if(lastTime.compareAndSet(current, current+1)) {
+                    timeMillis = current+1;
+                    break;
+                }
+            }
         }
 
         // time low
