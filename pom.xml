@@ -11,17 +11,11 @@
   <groupId>com.github.stephenc.eaio-uuid</groupId>
   <artifactId>uuid</artifactId>
   <version>3.4.0-SNAPSHOT</version>
+
   <name>UUID</name>
   <description>An implementation of the UUIDs and GUIDs specification in Java. UUIDs are 128 bit long identifiers that are guaranteed to be unique.</description>
   <url>http://stephenc.github.com/eaio-uuid</url>
   <inceptionYear>2003</inceptionYear>
-
-  <scm>
-    <connection>scm:git:git://github.com/stephenc/eaio-uuid.git</connection>
-    <developerConnection>scm:git:git@github.com:stephenc/eaio-uuid.git</developerConnection>
-    <url>http://github.com/stephenc/eaio-uuid/tree/master/</url>
-  </scm>
-
   <licenses>
     <license>
       <name>MIT License</name>
@@ -29,18 +23,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <issueManagement>
-    <system>github</system>
-    <url>http://github.com/stephenc/eaio-uuid/issues</url>
-  </issueManagement>
-
-  <distributionManagement>
-    <site>
-      <id>github.com</id>
-      <url>gitsite:git@github.com/stephenc/eaio-uuid.git</url>
-    </site>
-  </distributionManagement>
 
   <developers>
     <developer>
@@ -63,6 +45,32 @@
     </developer>
   </developers>
 
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+
+  <scm>
+    <connection>scm:git:git://github.com/stephenc/eaio-uuid.git</connection>
+    <developerConnection>scm:git:git@github.com:stephenc/eaio-uuid.git</developerConnection>
+    <url>http://github.com/stephenc/eaio-uuid/tree/master/</url>
+  </scm>
+  <issueManagement>
+    <system>github</system>
+    <url>http://github.com/stephenc/eaio-uuid/issues</url>
+  </issueManagement>
+  <distributionManagement>
+    <site>
+      <id>github.com</id>
+      <url>gitsite:git@github.com/stephenc/eaio-uuid.git</url>
+    </site>
+  </distributionManagement>
+
+  <properties>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.github.stephenc.eaio-grabbag</groupId>
@@ -78,23 +86,6 @@
   </dependencies>
 
   <build>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-provider-gitexe</artifactId>
-        <version>1.3</version>
-      </extension>
-      <extension>
-        <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.3</version>
-      </extension>
-      <extension>
-        <groupId>org.kathrynhuxtable.maven.wagon</groupId>
-        <artifactId>wagon-gitsite</artifactId>
-        <version>0.3.1</version>
-      </extension>
-    </extensions>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -145,7 +136,25 @@
         </configuration>
       </plugin>
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-gitexe</artifactId>
+        <version>1.3</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-manager-plexus</artifactId>
+        <version>1.3</version>
+      </extension>
+      <extension>
+        <groupId>org.kathrynhuxtable.maven.wagon</groupId>
+        <artifactId>wagon-gitsite</artifactId>
+        <version>0.3.1</version>
+      </extension>
+    </extensions>
   </build>
+
   <reporting>
     <plugins>
       <plugin>
@@ -174,11 +183,5 @@
       </plugin>
     </plugins>
   </reporting>
-
-  <properties>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
 
 </project>
