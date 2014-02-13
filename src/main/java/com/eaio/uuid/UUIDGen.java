@@ -4,7 +4,7 @@
  * Created on 09.08.2003.
  *
  * eaio: UUID - an implementation of the UUID specification
- * Copyright (c) 2003-2009 Johann Burkard (jb@eaio.com) http://eaio.com.
+ * Copyright (c) 2003-2013 Johann Burkard (jb@eaio.com) http://eaio.com.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -27,6 +27,8 @@
  */
 package com.eaio.uuid;
 
+import static com.eaio.util.Resource.close;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +39,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.eaio.util.lang.Hex;
 
@@ -57,22 +60,15 @@ import com.eaio.util.lang.Hex;
  *
  * @see <a href="http://johannburkard.de/software/uuid/">UUID</a>
  * @author <a href="mailto:jb@eaio.de">Johann Burkard</a>
- * @version $Id: UUIDGen.java 4688 2012-03-09 14:49:49Z johann $
+ * @version $Id: UUIDGen.java 4714 2012-03-16 11:43:28Z johann $
  * @see com.eaio.uuid.UUID
  */
 public final class UUIDGen {
 
     /**
-     * No instances needed.
-     */
-    private UUIDGen() {
-        super();
-    }
-
-    /**
      * The last time value. Used to remove duplicate UUIDs.
      */
-    private static long lastTime = Long.MIN_VALUE;
+    private static AtomicLong lastTime = new AtomicLong(Long.MIN_VALUE);
 
     /**
      * The cached MAC address.
@@ -170,26 +166,7 @@ public final class UUIDGen {
             }
             finally {
                 if (p != null) {
-                    if (in != null) {
-                        try {
-                            in.close();
-                        }
-                        catch (IOException ex) {
-                            // Ignore it.
-                        }
-                    }
-                    try {
-                        p.getErrorStream().close();
-                    }
-                    catch (IOException ex) {
-                        // Ignore it.
-                    }
-                    try {
-                        p.getOutputStream().close();
-                    }
-                    catch (IOException ex) {
-                        // Ignore it.
-                    }
+                    close(in, p.getErrorStream(), p.getOutputStream());
                     p.destroy();
                 }
             }
@@ -247,7 +224,7 @@ public final class UUIDGen {
      * @return a new time value
      * @see UUID#getTime()
      */
-    public static synchronized long createTime(long currentTimeMillis) {
+    public static long createTime(long currentTimeMillis) {
 
         long time;
 
@@ -255,11 +232,18 @@ public final class UUIDGen {
 
         long timeMillis = (currentTimeMillis * 10000) + 0x01B21DD213814000L;
 
-        if (timeMillis > lastTime) {
-            lastTime = timeMillis;
-        }
-        else {
-            timeMillis = ++lastTime;
+        while (true) {
+            long current = lastTime.get();
+            if (timeMillis > current) {
+                if (lastTime.compareAndSet(current, timeMillis)) {
+                    break;
+                }
+            } else {
+                if (lastTime.compareAndSet(current, current + 1)) {
+                    timeMillis = current + 1;
+                    break;
+                }
+            }
         }
 
         // time low
@@ -308,26 +292,7 @@ public final class UUIDGen {
         }
         finally {
             if (p != null) {
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    }
-                    catch (IOException ex) {
-                        // Ignore it.
-                    }
-                }
-                try {
-                    p.getErrorStream().close();
-                }
-                catch (IOException ex) {
-                    // Ignore it.
-                }
-                try {
-                    p.getOutputStream().close();
-                }
-                catch (IOException ex) {
-                    // Ignore it.
-                }
+                close(reader, p.getErrorStream(), p.getOutputStream());
                 p.destroy();
             }
         }

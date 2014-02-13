@@ -4,7 +4,7 @@
  * Created 30.01.2006.
  *
  * eaio: UUID - an implementation of the UUID specification
- * Copyright (c) 2003-2009 Johann Burkard (jb@eaio.com) http://eaio.com.
+ * Copyright (c) 2003-2013 Johann Burkard (jb@eaio.com) http://eaio.com.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -27,6 +27,9 @@
  */
 package com.eaio.uuid;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * The MAC address parser attempts to find the following patterns:
  * <ul>
@@ -36,16 +39,11 @@ package com.eaio.uuid;
  *
  * @see <a href="http://johannburkard.de/software/uuid/">UUID</a>
  * @author <a href="mailto:jb@eaio.com">Johann Burkard</a>
- * @version $Id: MACAddressParser.java 1888 2009-03-15 12:43:24Z johann $
+ * @version $Id: MACAddressParser.java 4714 2012-03-16 11:43:28Z johann $
  */
-class MACAddressParser {
-
-    /**
-     * No instances needed.
-     */
-    private MACAddressParser() {
-        super();
-    }
+public class MACAddressParser {
+	
+	public static final Pattern MAC_ADDRESS = Pattern.compile("((?:[A-F0-9]{1,2}[:-]){5}[A-F0-9]{1,2})|(?:0x)(\\d{12})(?:.+ETHER)", Pattern.CASE_INSENSITIVE);
 
     /**
      * Attempts to find a pattern in the given String.
@@ -54,63 +52,15 @@ class MACAddressParser {
      * @return the substring that matches this pattern or <code>null</code>
      */
     static String parse(String in) {
-
-        String out = in;
-
-        // lanscan
-
-        int hexStart = out.indexOf("0x");
-        if (hexStart != -1 && out.indexOf("ETHER") != -1) {
-            int hexEnd = out.indexOf(' ', hexStart);
-            if (hexEnd > hexStart + 2) {
-                out = out.substring(hexStart, hexEnd);
+        Matcher m = MAC_ADDRESS.matcher(in);
+        if (m.find()) {
+            String g = m.group(2);
+            if (g == null) {
+                g = m.group(1);
             }
+        	return g == null ? g : g.replace('-', ':');
         }
-
-        else {
-
-            int octets = 0;
-            int lastIndex, old, end;
-
-            if (out.indexOf('-') > -1) {
-                out = out.replace('-', ':');
-            }
-
-            lastIndex = out.lastIndexOf(':');
-
-            if (lastIndex > out.length() - 2) {
-                out = null;
-            }
-            else {
-
-                end = Math.min(out.length(), lastIndex + 3);
-
-                ++octets;
-                old = lastIndex;
-                while (octets != 5 && lastIndex != -1 && lastIndex > 1) {
-                    lastIndex = out.lastIndexOf(':', --lastIndex);
-                    if (old - lastIndex == 3 || old - lastIndex == 2) {
-                        ++octets;
-                        old = lastIndex;
-                    }
-                }
-
-                if (octets == 5 && lastIndex > 1) {
-                    out = out.substring(lastIndex - 2, end).trim();
-                }
-                else {
-                    out = null;
-                }
-
-            }
-
-        }
-
-        if (out != null && out.startsWith("0x")) {
-            out = out.substring(2);
-        }
-
-        return out;
+        return null;
     }
 
 }

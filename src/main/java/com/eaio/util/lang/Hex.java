@@ -3,7 +3,7 @@
  *
  * Created 04.07.2003.
  *
- * eaio: UUID - an implementation of the UUID specification Copyright (c) 2003-2009 Johann Burkard (jb@eaio.com)
+ * eaio: UUID - an implementation of the UUID specification Copyright (c) 2003-2013 Johann Burkard (jb@eaio.com)
  * http://eaio.com.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -29,16 +29,9 @@ import java.io.IOException;
  *
  * @see <a href="http://johannburkard.de/software/uuid/">UUID</a>
  * @author <a href="mailto:jb@eaio.com">Johann Burkard</a>
- * @version $Id: Hex.java 1888 2009-03-15 12:43:24Z johann $
+ * @version $Id: Hex.java 4714 2012-03-16 11:43:28Z johann $
  */
 public final class Hex {
-
-    /**
-     * No instances needed.
-     */
-    private Hex() {
-        super();
-    }
 
     private static final char[] DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',
             'f' };

@@ -4,7 +4,7 @@
  * Created 07.02.2003
  *
  * eaio: UUID - an implementation of the UUID specification
- * Copyright (c) 2003-2009 Johann Burkard (jb@eaio.com) http://eaio.com.
+ * Copyright (c) 2003-2013 Johann Burkard (jb@eaio.com) http://eaio.com.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
