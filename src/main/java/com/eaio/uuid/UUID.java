@@ -299,4 +299,14 @@ public class UUID implements Comparable<UUID>, Externalizable, Cloneable,
         return new UUID(0, 0);
     }
 
+    /**
+     * Dedicated method which allows UUID object to be created by jaxrs runtime.
+     *
+     * @param uuid String representation of UUID.
+     * @return UUID object.
+     */
+    public static UUID fromString(final String uuid) {
+        return new UUID(uuid);
+    }
+
 }
