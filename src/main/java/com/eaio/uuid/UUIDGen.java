@@ -40,6 +40,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.Random;
 
 import com.eaio.util.lang.Hex;
 
@@ -173,6 +174,7 @@ public final class UUIDGen {
 
         }
 
+        Random r = new Random();
         if (macAddress != null) {
             clockSeqAndNode |= Hex.parseLong(macAddress);
         }
@@ -185,13 +187,13 @@ public final class UUIDGen {
                 clockSeqAndNode |= local[3] & 0xFF;
             }
             catch (UnknownHostException ex) {
-                clockSeqAndNode |= (long) (Math.random() * 0x7FFFFFFF);
+                clockSeqAndNode |= (long) (r.nextDouble() * 0x7FFFFFFF);
             }
         }
 
         // Skip the clock sequence generation process and use random instead.
 
-        clockSeqAndNode |= (long) (Math.random() * 0x3FFF) << 48;
+        clockSeqAndNode |= (long) (r.nextDouble() * 0x3FFF) << 48;
 
     }
 
