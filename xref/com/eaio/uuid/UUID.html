@@ -307,9 +307,19 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/eaio/uuid/UUID.html">UUID</a>(0, 0);
 <a class="jxr_linenumber" name="L300" href="#L300">300</a>     }
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> }
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">     * Dedicated method which allows UUID object to be created by jaxrs runtime.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">     * @param uuid String representation of UUID.</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">     * @return UUID object.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../com/eaio/uuid/UUID.html">UUID</a> fromString(<strong class="jxr_keyword">final</strong> String uuid) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/eaio/uuid/UUID.html">UUID</a>(uuid);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>     }
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2003&#x2013;2014. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2003&#x2013;2018. All rights reserved.</div>
 </body>
 </html>
