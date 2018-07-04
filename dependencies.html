@@ -25,7 +25,7 @@ UUID
     <div id="breadcrumbs">
       <div class="xleft">
         <span id="publishDate">Last Published: 2018-07-04</span>
-          &nbsp;| <span id="projectVersion">Version: 3.4.1-SNAPSHOT</span>
+          &nbsp;| <span id="projectVersion">Version: 3.4.2</span>
       </div>
       <div class="xright"><a href="./" title="UUID">UUID</a>      </div>
       <div class="clear">
@@ -61,23 +61,7 @@ UUID
       <div id="contentBox">
 <a name="Project_Dependencies"></a>
 <div class="section">
-<h2><a name="Project_Dependencies"></a>Project Dependencies</h2><a name="Project_Dependencies_compile"></a>
-<div class="section">
-<h3><a name="compile"></a>compile</h3>
-<p>The following is a list of compile dependencies for this project. These dependencies are required to compile and run the application:</p>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>GroupId</th>
-<th>ArtifactId</th>
-<th>Version</th>
-<th>Type</th>
-<th>License</th></tr>
-<tr class="b">
-<td>com.github.stephenc.eaio-grabbag</td>
-<td><a class="externalLink" href="http://github.com/stephenc/eaio-grabbag">grabbag</a></td>
-<td>1.8.1</td>
-<td>jar</td>
-<td><a class="externalLink" href="http://www.opensource.org/licenses/mit-license.php">MIT License</a></td></tr></table></div><a name="Project_Dependencies_test"></a>
+<h2><a name="Project_Dependencies"></a>Project Dependencies</h2><a name="Project_Dependencies_test"></a>
 <div class="section">
 <h3><a name="test"></a>test</h3>
 <p>The following is a list of test dependencies for this project. These dependencies are only required to compile and run unit tests for the application:</p>
@@ -93,7 +77,23 @@ UUID
 <td><a class="externalLink" href="http://junit.org">junit</a></td>
 <td>4.10</td>
 <td>jar</td>
-<td><a class="externalLink" href="http://www.opensource.org/licenses/cpl1.0.txt">Common Public License Version 1.0</a></td></tr></table></div></div><a name="Project_Transitive_Dependencies"></a>
+<td><a class="externalLink" href="http://www.opensource.org/licenses/cpl1.0.txt">Common Public License Version 1.0</a></td></tr></table></div><a name="Project_Dependencies_provided"></a>
+<div class="section">
+<h3><a name="provided"></a>provided</h3>
+<p>The following is a list of provided dependencies for this project. These dependencies are required to compile the application, but should be provided by default when using the library:</p>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>GroupId</th>
+<th>ArtifactId</th>
+<th>Version</th>
+<th>Type</th>
+<th>License</th></tr>
+<tr class="b">
+<td>com.github.stephenc.eaio-grabbag</td>
+<td><a class="externalLink" href="http://github.com/stephenc/eaio-grabbag">grabbag</a></td>
+<td>1.8.1</td>
+<td>jar</td>
+<td><a class="externalLink" href="http://www.opensource.org/licenses/mit-license.php">MIT License</a></td></tr></table></div></div><a name="Project_Transitive_Dependencies"></a>
 <div class="section">
 <h2><a name="Project_Transitive_Dependencies"></a>Project Transitive Dependencies</h2>
 <p>The following is a list of transitive dependencies for this project. Transitive dependencies are the dependencies of the project dependencies.</p><a name="Project_Transitive_Dependencies_test"></a>
@@ -135,7 +135,7 @@ UUID
 <div class="section">
 <h3><a name="Dependency_Tree"></a>Dependency Tree</h3>
 <ul>
-<li>com.github.stephenc.eaio-uuid:uuid:bundle:3.4.1-SNAPSHOT <img id="_img1" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep0', '_img1' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep0" style="display:none">
+<li>com.github.stephenc.eaio-uuid:uuid:bundle:3.4.2 <img id="_img1" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep0', '_img1' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep0" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>UUID</th></tr>
@@ -145,7 +145,7 @@ UUID
 <p><b>URL: </b><a class="externalLink" href="http://stephenc.github.com/eaio-uuid">http://stephenc.github.com/eaio-uuid</a></p>
 <p><b>Project License: </b><a class="externalLink" href="http://www.opensource.org/licenses/mit-license.php">MIT License</a></p></td></tr></table></div>
 <ul>
-<li>com.github.stephenc.eaio-grabbag:grabbag:jar:1.8.1 (compile) <img id="_img3" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep2', '_img3' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep2" style="display:none">
+<li>com.github.stephenc.eaio-grabbag:grabbag:jar:1.8.1 (provided) <img id="_img3" src="./images/icon_info_sml.gif" alt="Information" onclick="toggleDependencyDetail( '_dep2', '_img3' );" style="cursor: pointer;vertical-align:text-bottom;"></img><div id="_dep2" style="display:none">
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>A grabbag of wonderful things.</th></tr>
@@ -230,21 +230,21 @@ UUID
 <td>1.5</td>
 <td>3</td></tr>
 <tr class="a">
-<td>compile: 1</td>
-<td>compile: 75.04 kB</td>
-<td>compile: 59</td>
-<td>compile: 36</td>
-<td>compile: 13</td>
-<td>-</td>
-<td>compile: 1</td></tr>
-<tr class="b">
 <td>test: 2</td>
 <td>test: 329.80 kB</td>
 <td>test: 344</td>
 <td>test: 273</td>
 <td>test: 34</td>
 <td>-</td>
-<td>test: 2</td></tr></table></div><a name="Dependency_Repository_Locations"></a>
+<td>test: 2</td></tr>
+<tr class="b">
+<td>provided: 1</td>
+<td>provided: 75.04 kB</td>
+<td>provided: 59</td>
+<td>provided: 36</td>
+<td>provided: 13</td>
+<td>-</td>
+<td>provided: 1</td></tr></table></div><a name="Dependency_Repository_Locations"></a>
 <div class="section">
 <h2><a name="Dependency_Repository_Locations"></a>Dependency Repository Locations</h2>
 <table border="0" class="bodyTable">
@@ -273,7 +273,7 @@ UUID
 <tr class="a">
 <th>Total</th></tr>
 <tr class="b">
-<td>3 (compile: 1, test: 2)</td></tr></table></div>
+<td>3 (test: 2, provided: 1)</td></tr></table></div>
       </div>
     </div>
     <div class="clear">
