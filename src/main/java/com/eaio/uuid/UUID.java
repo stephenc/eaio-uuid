@@ -29,8 +29,6 @@ package com.eaio.uuid;
 
 import java.io.*;
 
-import org.omg.CORBA.portable.IDLEntity;
-
 import com.eaio.util.lang.Hex;
 
 /**
@@ -51,8 +49,7 @@ import com.eaio.util.lang.Hex;
  * @author <a href="mailto:jb@eaio.de">Johann Burkard</a>
  * @version $Id: UUID.java 4688 2012-03-09 14:49:49Z johann $
  */
-public class UUID implements Comparable<UUID>, Externalizable, Cloneable,
-        IDLEntity {
+public class UUID implements Comparable<UUID>, Externalizable, Cloneable {
 
     /**
      * Hasn't ever changed between versions.
